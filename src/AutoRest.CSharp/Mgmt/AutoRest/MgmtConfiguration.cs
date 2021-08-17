@@ -78,7 +78,8 @@ namespace AutoRest.CSharp.AutoRest.Plugins
             JsonElement? mergeOperations = default,
             JsonElement? armCore = default,
             JsonElement? resourceModelRequiresType = default,
-            JsonElement? resourceModelRequiresName = default)
+            JsonElement? resourceModelRequiresName = default,
+            JsonElement? testmodeler = default)
         {
             RequestPathToParent = !IsValidJsonElement(requestPathToParent) ? new Dictionary<string, string>() : JsonSerializer.Deserialize<Dictionary<string, string>>(requestPathToParent.ToString());
             RequestPathToResourceName = !IsValidJsonElement(requestPathToResourceName) ? new Dictionary<string, string>() : JsonSerializer.Deserialize<Dictionary<string, string>>(requestPathToResourceName.ToString());
@@ -105,6 +106,7 @@ namespace AutoRest.CSharp.AutoRest.Plugins
             IsArmCore = !IsValidJsonElement(armCore) ? false : Convert.ToBoolean(armCore.ToString());
             DoesResourceModelRequireType = !IsValidJsonElement(resourceModelRequiresType) ? true : Convert.ToBoolean(resourceModelRequiresType.ToString());
             DoesResourceModelRequireName = !IsValidJsonElement(resourceModelRequiresName) ? true : Convert.ToBoolean(resourceModelRequiresName.ToString());
+            TestModeler = testmodeler;
         }
 
         public MgmtDebugConfiguration MgmtDebug { get; }
@@ -130,6 +132,7 @@ namespace AutoRest.CSharp.AutoRest.Plugins
         public IReadOnlyList<string> ListException { get; }
 
         public bool IsArmCore { get; }
+        public JsonElement? TestModeler { get; }
 
         internal static MgmtConfiguration GetConfiguration(IPluginCommunication autoRest)
         {
@@ -149,7 +152,8 @@ namespace AutoRest.CSharp.AutoRest.Plugins
                 mergeOperations: autoRest.GetValue<JsonElement?>("merge-operations").GetAwaiter().GetResult(),
                 armCore: autoRest.GetValue<JsonElement?>("arm-core").GetAwaiter().GetResult(),
                 resourceModelRequiresType: autoRest.GetValue<JsonElement?>("resource-model-requires-type").GetAwaiter().GetResult(),
-                resourceModelRequiresName: autoRest.GetValue<JsonElement?>("resource-model-requires-name").GetAwaiter().GetResult());
+                resourceModelRequiresName: autoRest.GetValue<JsonElement?>("resource-model-requires-name").GetAwaiter().GetResult(),
+                testmodeler: autoRest.GetValue<JsonElement?>("testmodeler").GetAwaiter().GetResult());
         }
 
         internal void SaveConfiguration(Utf8JsonWriter writer)
