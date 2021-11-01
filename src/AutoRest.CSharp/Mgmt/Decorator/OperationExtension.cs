@@ -25,13 +25,20 @@ namespace AutoRest.CSharp.Mgmt.Decorator
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="hasSuffix"></param>
+        /// <param name="replaceListName"></param>
         /// <returns></returns>
-        public static string MgmtCSharpName(this Operation operation, bool hasSuffix)
+        public static string MgmtCSharpName(this Operation operation, bool hasSuffix, bool replaceListName = true)
         {
             var originalName = operation.CSharpName();
+            if (!replaceListName)
+            {
+                return originalName;
+            }
+
             var words = originalName.SplitByCamelCase();
             if (!words.First().Equals("List", StringComparison.InvariantCultureIgnoreCase))
                 return originalName;
+
             hasSuffix = hasSuffix || words.Count() > 1;
             var wordToReplace = hasSuffix ? "Get" : "GetAll";
             var replacedWords = wordToReplace.AsIEnumerable().Concat(words.Skip(1));

@@ -63,19 +63,23 @@ namespace AutoRest.CSharp.Mgmt.Output
         {
             var operationGroup = _context.Library.GetRestClient(operation.GetHttpPath()).OperationGroup;
             var resourceOperationGroup = resourceRestClient?.OperationGroup;
+
+            var isListMethod = _context.Library.RestClientMethods[operation].IsListMethod(out _);
             if (operationGroup == resourceOperationGroup)
             {
-                return operation.MgmtCSharpName(false);
+                return operation.MgmtCSharpName(false, isListMethod);
             }
 
             var suffix = string.Empty;
-            if (_context.Library.RestClientMethods[operation].IsListMethod(out _))
+            if (isListMethod)
             {
                 suffix = operationGroup.Key.IsNullOrEmpty() ? string.Empty : operationGroup.Key.ToPlural();
-                return $"{operation.MgmtCSharpName(!suffix.IsNullOrEmpty())}{suffix}";
             }
-            suffix = operationGroup.Key.IsNullOrEmpty() ? string.Empty : operationGroup.Key.ToSingular();
-            return $"{operation.MgmtCSharpName(!suffix.IsNullOrEmpty())}{suffix}";
+            else
+            {
+                suffix = operationGroup.Key.IsNullOrEmpty() ? string.Empty : operationGroup.Key.ToSingular();
+            }
+            return $"{operation.MgmtCSharpName(!suffix.IsNullOrEmpty(), isListMethod)}{suffix}";
         }
     }
 }
