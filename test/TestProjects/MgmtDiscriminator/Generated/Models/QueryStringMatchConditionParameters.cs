@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Collections.Generic;
+using System.Linq;
 using Azure.Core;
 
 namespace MgmtDiscriminator.Models
@@ -35,8 +36,8 @@ namespace MgmtDiscriminator.Models
             TypeName = typeName;
             Operator = @operator;
             NegateCondition = negateCondition;
-            MatchValues = matchValues;
-            Transforms = transforms;
+            MatchValues = matchValues.ToList();
+            Transforms = transforms.ToList();
         }
 
         /// <summary> Gets or sets the type name. </summary>

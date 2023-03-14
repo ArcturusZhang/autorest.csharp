@@ -25,13 +25,13 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRemoteAddressCondition. </summary>
-        /// <param name="name"> The name of the condition for the delivery rule. </param>
-        /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        internal DeliveryRuleRemoteAddressCondition(MatchVariable name, string foo, RemoteAddressMatchConditionParameters parameters) : base(name, foo)
+        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
+        protected DeliveryRuleRemoteAddressCondition(RemoteAddressMatchConditionParameters parameters)
         {
+            Argument.AssertNotNull(parameters, nameof(parameters));
+
             Parameters = parameters;
-            Name = name;
         }
 
         /// <summary> Defines the parameters for the condition. </summary>

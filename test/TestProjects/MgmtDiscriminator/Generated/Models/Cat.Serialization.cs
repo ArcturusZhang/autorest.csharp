@@ -52,7 +52,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new Cat(kind, id.Value, meow.Value);
+            return new Cat(id.Value, meow.Value);
         }
     }
 }

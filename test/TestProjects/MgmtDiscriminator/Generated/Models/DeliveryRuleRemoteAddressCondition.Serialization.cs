@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new DeliveryRuleRemoteAddressCondition(name, foo.Value, parameters);
+            return new DeliveryRuleRemoteAddressCondition(parameters);
         }
     }
 }

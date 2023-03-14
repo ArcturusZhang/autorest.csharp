@@ -11,11 +11,8 @@ namespace MgmtDiscriminator.Models
     internal partial class UnknownDeliveryRuleAction : DeliveryRuleAction
     {
         /// <summary> Initializes a new instance of UnknownDeliveryRuleAction. </summary>
-        /// <param name="name"> The name of the action for the delivery rule. </param>
-        /// <param name="foo"> for test. </param>
-        internal UnknownDeliveryRuleAction(DeliveryRuleActionType name, string foo) : base(name, foo)
+        protected UnknownDeliveryRuleAction()
         {
-            Name = name;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new DeliveryRuleResponseHeaderAction(name, foo.Value, parameters);
+            return new DeliveryRuleResponseHeaderAction(parameters);
         }
     }
 }

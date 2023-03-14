@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new UrlSigningAction(name, foo.Value, parameters);
+            return new UrlSigningAction(parameters);
         }
     }
 }

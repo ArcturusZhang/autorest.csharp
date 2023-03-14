@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new OriginGroupOverrideAction(name, foo.Value, parameters);
+            return new OriginGroupOverrideAction(parameters);
         }
     }
 }

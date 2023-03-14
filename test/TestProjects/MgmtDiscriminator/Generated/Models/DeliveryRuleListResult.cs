@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Collections.Generic;
+using System.Linq;
 using Azure.Core;
 using MgmtDiscriminator;
 
@@ -24,7 +25,7 @@ namespace MgmtDiscriminator.Models
         /// <param name="value"> The values. </param>
         internal DeliveryRuleListResult(IReadOnlyList<DeliveryRuleData> value)
         {
-            Value = value;
+            Value = value.ToList();
         }
 
         /// <summary> The values. </summary>

@@ -41,7 +41,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new UnknownPet(kind, id.Value);
+            return new UnknownPet();
         }
     }
 }

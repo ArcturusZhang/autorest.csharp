@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AutoRest.CSharp.Common.Decorator;
+using AutoRest.CSharp.Common.Input;
 using AutoRest.CSharp.Common.Output.Models.Types;
 using AutoRest.CSharp.Generation.Types;
 using AutoRest.CSharp.Input;
@@ -116,75 +117,218 @@ namespace AutoRest.CSharp.Output.Models.Types
             }
         }
 
-        protected override ObjectTypeConstructor BuildSerializationConstructor()
+        private ConstructorSignature? _publicConstructor;
+        private ConstructorSignature? _serializationConstructor;
+        public ConstructorSignature InitializationConstructorSignature => _publicConstructor ??= EnsurePublicConstructorSignature();
+        public ConstructorSignature SerializationConstructorSignature => _serializationConstructor ??= EnsureSerializationConstructorSignature();
+
+        private ConstructorSignature EnsurePublicConstructorSignature()
         {
-            bool ownsDiscriminatorProperty = false;
+            return CreatePublicConstructorSignature(Declaration.Name, _usage, Fields.PublicConstructorParameters);
+        }
 
-            List<Parameter> serializationConstructorParameters = new List<Parameter>();
-            List<ObjectPropertyInitializer> serializationInitializers = new List<ObjectPropertyInitializer>();
-            ObjectTypeConstructor? baseSerializationCtor = null;
+        private ConstructorSignature EnsureSerializationConstructorSignature()
+        {
+            return IncludeDeserializer
+                ? CreateSerializationConstructorSignature(Declaration.Name, Fields.PublicConstructorParameters, Fields.SerializationParameters) ?? InitializationConstructorSignature
+                : InitializationConstructorSignature;
+        }
 
-            if (Inherits is { IsFrameworkType: false, Implementation: ObjectType objectType })
-            {
-                baseSerializationCtor = objectType.SerializationConstructor;
-                serializationConstructorParameters.AddRange(baseSerializationCtor.Signature.Parameters);
-            }
+        private SchemaObjectTypeFields? _fields;
+        private SchemaObjectTypeFields Fields => _fields ??= EnsureFields();
+
+        private SchemaObjectTypeFields EnsureFields()
+        {
+            var publicParameters = new List<Parameter>();
+            var serializationParameters = new List<Parameter>();
 
             foreach (var property in Properties)
             {
-                // skip the flattened properties, we should never include them in serialization
+                // skip the flattened properties, we should never include them in the constructors
                 if (property is FlattenedObjectTypeProperty)
+                {
                     continue;
+                }
 
-                var type = property.Declaration.Type;
+                var propertyType = property.Declaration.Type;
+                if (property.SchemaProperty?.Schema is ConstantSchema constantSchema)
+                {
+                    // this corresponds to the InputLiteralType in DPG
+                    continue;
+                }
 
-                var deserializationParameter = new Parameter(
+                var validate = property.SchemaProperty?.Nullable != true && !propertyType.IsValueType ? ValidationType.AssertNotNull : ValidationType.None;
+                var parameter = new Parameter(
                     property.Declaration.Name.ToVariableName(),
                     property.ParameterDescription,
-                    type,
+                    propertyType,
                     null,
-                    ValidationType.None,
-                    null
-                );
+                    validate,
+                    null);
 
-                ownsDiscriminatorProperty |= property == Discriminator?.Property;
-
-                serializationConstructorParameters.Add(deserializationParameter);
-
-                serializationInitializers.Add(new ObjectPropertyInitializer(property, deserializationParameter, GetPropertyDefaultValue(property)));
-            }
-
-            if (InitializationConstructor.Signature.Parameters
-                .Select(p => p.Type)
-                .SequenceEqual(serializationConstructorParameters.Select(p => p.Type)))
-            {
-                return InitializationConstructor;
-            }
-
-            if (Discriminator != null)
-            {
-                // Add discriminator initializer to constructor at every level of hierarchy
-                if (!ownsDiscriminatorProperty &&
-                    baseSerializationCtor != null)
+                // add all parameter into the serialization parameter list
+                serializationParameters.Add(parameter);
+                // only adds to public when it is required
+                if (IsStruct || property.SchemaProperty?.IsRequired == true)
                 {
-                    var discriminatorParameter = baseSerializationCtor.FindParameterByInitializedProperty(Discriminator.Property);
-                    Debug.Assert(discriminatorParameter != null);
-                    ReferenceOrConstant? defaultValue = null;
-                    if (TypeFactory.CanBeInitializedInline(discriminatorParameter.Type, Discriminator.Value))
-                    {
-                        defaultValue = Discriminator.Value;
-                    }
-                    serializationInitializers.Add(new ObjectPropertyInitializer(Discriminator.Property, discriminatorParameter, defaultValue));
+                    // For structs all properties become required
+                    publicParameters.Add(parameter);
                 }
             }
 
-            return new ObjectTypeConstructor(
-                Type.Name,
-                IsInheritableCommonType ? Protected : Internal,
-                serializationConstructorParameters.ToArray(),
-                serializationInitializers.ToArray(),
-                baseSerializationCtor
-            );
+            return new(publicParameters, serializationParameters);
+        }
+
+        private ConstructorSignature CreatePublicConstructorSignature(string name, SchemaTypeUsage usage, IEnumerable<Parameter> parameters)
+        {
+            //get base public ctor params
+            List<Parameter> fullParameterList;
+            IEnumerable<Parameter> parametersToPassToBase;
+            GetConstructorParameters(parameters, out fullParameterList, out parametersToPassToBase, true, CreatePublicConstructorParameter);
+
+            var summary = $"Initializes a new instance of {name}";
+            var accessibility = usage == SchemaTypeUsage.Output
+                ? MethodSignatureModifiers.Internal
+                : MethodSignatureModifiers.Public;
+
+            if (Discriminator is not null)
+                accessibility = MethodSignatureModifiers.Protected;
+
+            FormattableString[] baseInitializers = GetInitializersFromParameters(parametersToPassToBase);
+
+            return new ConstructorSignature(
+                name,
+                summary,
+                null,
+                accessibility,
+                fullParameterList,
+                Initializer: new(true, baseInitializers));
+        }
+
+        private ConstructorSignature? CreateSerializationConstructorSignature(string name, IReadOnlyList<Parameter> publicParameters, IReadOnlyList<Parameter> serializationParameters)
+        {
+            if (!serializationParameters.Any(p => TypeFactory.IsList(p.Type)) && publicParameters.SequenceEqual(serializationParameters))
+                return null;
+
+            //get base public ctor params
+            List<Parameter> fullParameterList;
+            IEnumerable<Parameter> parametersToPassToBase;
+            GetConstructorParameters(serializationParameters, out fullParameterList, out parametersToPassToBase, false, CreateSerializationConstructorParameter);
+
+            FormattableString[] baseInitializers = GetInitializersFromParameters(parametersToPassToBase);
+
+            return new ConstructorSignature(
+                name,
+                $"Initializes a new instance of {name}",
+                null,
+                MethodSignatureModifiers.Internal,
+                fullParameterList,
+                Initializer: new(true, baseInitializers));
+        }
+
+        private void GetConstructorParameters(IEnumerable<Parameter> parameters, out List<Parameter> fullParameterList, out IEnumerable<Parameter> parametersToPassToBase, bool isInitializer, Func<Parameter, Parameter> creator)
+        {
+            fullParameterList = new List<Parameter>();
+            var parent = GetBaseObjectType();
+            parametersToPassToBase = Array.Empty<Parameter>();
+            if (parent is not null)
+            {
+                var ctor = isInitializer ? parent.InitializationConstructor : parent.SerializationConstructor;
+                parametersToPassToBase = ctor.Signature.Parameters;
+                fullParameterList.AddRange(this == Discriminator?.DefaultObjectType ? parametersToPassToBase : parametersToPassToBase.Where(p => p.Name != Discriminator?.SerializedName));
+            }
+            fullParameterList.AddRange(parameters.Select(creator));
+        }
+
+        private static Parameter CreatePublicConstructorParameter(Parameter p)
+            => p with { Type = TypeFactory.GetInputType(p.Type) };
+
+        private static Parameter CreateSerializationConstructorParameter(Parameter p) // we don't validate parameters for serialization constructor
+            => p with { Validation = ValidationType.None };
+
+        private FormattableString[] GetInitializersFromParameters(IEnumerable<Parameter> parametersToPassToBase)
+        {
+            var baseInitializers = ConstructorInitializer.ParametersToFormattableString(parametersToPassToBase).ToArray();
+            if (Discriminator?.Value is not null && this != Discriminator?.DefaultObjectType)
+            {
+                FormattableString discriminatorInitializer = Discriminator!.Value.Value.Type.Equals(typeof(string)) ? (FormattableString)$"\"{Discriminator.Value.Value.Value}\"" : (FormattableString)$"{Discriminator.Value.Value.Value}";
+                for (int i = 0; i < baseInitializers.Length; i++)
+                {
+                    if (baseInitializers[i].ToString() == Discriminator.SerializedName)
+                        baseInitializers[i] = discriminatorInitializer;
+                }
+            }
+
+            return baseInitializers;
+        }
+
+        protected override ObjectTypeConstructor BuildSerializationConstructor()
+        {
+            ObjectTypeConstructor? baseCtor = GetBaseObjectType()?.SerializationConstructor;
+
+            return new ObjectTypeConstructor(SerializationConstructorSignature, GetPropertyInitializers(Fields.SerializationParameters), baseCtor);
+        }
+
+        private ObjectPropertyInitializer[] GetPropertyInitializers(IReadOnlyList<Parameter> parameters)
+        {
+            List<ObjectPropertyInitializer> defaultCtorInitializers = new List<ObjectPropertyInitializer>();
+
+            Dictionary<string, Parameter> parameterMap = parameters.ToDictionary(
+                parameter => parameter.Name,
+                parameter => parameter);
+
+            foreach (var property in Properties)
+            {
+                ReferenceOrConstant? initializationValue;
+                Constant? defaultInitializationValue = null;
+
+                var propertyType = property.Declaration.Type;
+                if (IsStruct || parameterMap.ContainsKey(property.Declaration.Name.FirstCharToLowerCase()))
+                {
+                    // For structs all properties become required
+                    Constant? defaultParameterValue = null;
+                    if (property.SchemaProperty?.ClientDefaultValue is object defaultValueObject)
+                    {
+                        defaultParameterValue = BuilderHelpers.ParseConstant(defaultValueObject, propertyType);
+                        defaultInitializationValue = defaultParameterValue;
+                    }
+
+                    var inputType = TypeFactory.GetInputType(propertyType);
+                    if (defaultParameterValue != null && !TypeFactory.CanBeInitializedInline(property.ValueType, defaultParameterValue))
+                    {
+                        inputType = inputType.WithNullable(true);
+                        defaultParameterValue = Constant.Default(inputType);
+                    }
+
+                    var validate = property.SchemaProperty?.Nullable != true && !inputType.IsValueType ? ValidationType.AssertNotNull : ValidationType.None;
+                    var defaultCtorParameter = new Parameter(
+                        property.Declaration.Name.ToVariableName(),
+                        property.ParameterDescription,
+                        inputType,
+                        defaultParameterValue,
+                        validate,
+                        null
+                    );
+
+                    initializationValue = defaultCtorParameter;
+                }
+                else
+                {
+                    initializationValue = null;// need to get discriminator value from here GetPropertyDefaultValue(property);
+
+                    if (initializationValue == null && TypeFactory.IsCollectionType(propertyType))
+                    {
+                        initializationValue = Constant.NewInstanceOf(TypeFactory.GetPropertyImplementationType(propertyType));
+                    }
+                }
+
+                if (initializationValue != null)
+                {
+                    defaultCtorInitializers.Add(new ObjectPropertyInitializer(property, initializationValue.Value, defaultInitializationValue));
+                }
+            }
+
+            return defaultCtorInitializers.ToArray();
         }
 
         private ReferenceOrConstant? GetPropertyDefaultValue(ObjectTypeProperty property)
@@ -308,7 +452,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             }
 
             // Skip serialization ctor if they are the same
-            if (!SkipSerializerConstructor && InitializationConstructor != SerializationConstructor)
+            if (InitializationConstructor != SerializationConstructor)
             {
                 yield return SerializationConstructor;
             }
@@ -664,5 +808,7 @@ namespace AutoRest.CSharp.Output.Models.Types
 
             return _context.BaseLibrary.FindTypeProviderForSchema(defaultDerivedSchema) as ObjectType;
         }
+
+        private record SchemaObjectTypeFields(IReadOnlyList<Parameter> PublicConstructorParameters, IReadOnlyList<Parameter> SerializationParameters);
     }
 }

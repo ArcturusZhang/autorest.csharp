@@ -17,13 +17,11 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of Cat. </summary>
-        /// <param name="kind"> The kind of the pet. </param>
         /// <param name="id"> The Id of the pet. </param>
         /// <param name="meow"> A cat can meow. </param>
-        internal Cat(PetKind kind, string id, string meow) : base(kind, id)
+        internal Cat(string id, string meow) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, id)
         {
             Meow = meow;
-            Kind = kind;
         }
 
         /// <summary> A cat can meow. </summary>

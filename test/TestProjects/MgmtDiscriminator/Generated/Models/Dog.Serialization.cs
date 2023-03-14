@@ -52,7 +52,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new Dog(kind, id.Value, bark.Value);
+            return new Dog(id.Value, bark.Value);
         }
     }
 }

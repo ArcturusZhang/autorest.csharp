@@ -25,6 +25,18 @@ namespace MgmtDiscriminator.Models
             ParamName = paramName;
         }
 
+        /// <summary> Initializes a new instance of UrlSigningParamIdentifier. </summary>
+        /// <param name="paramIndicator"> Indicates the purpose of the parameter. </param>
+        /// <param name="paramName"> Parameter name. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="paramName"/> is null. </exception>
+        public UrlSigningParamIdentifier(ParamIndicator paramIndicator, string paramName)
+        {
+            Argument.AssertNotNull(paramName, nameof(paramName));
+
+            ParamIndicator = paramIndicator;
+            ParamName = paramName;
+        }
+
         /// <summary> Indicates the purpose of the parameter. </summary>
         public ParamIndicator ParamIndicator { get; set; }
         /// <summary> Parameter name. </summary>
