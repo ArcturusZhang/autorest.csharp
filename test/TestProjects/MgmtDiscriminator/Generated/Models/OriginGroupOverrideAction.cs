@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of OriginGroupOverrideAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal OriginGroupOverrideAction(string foo, OriginGroupOverrideActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal OriginGroupOverrideAction(string foo, OriginGroupOverrideActionParameters parameters) : base(DeliveryRuleActionType.OriginGroupOverride, foo)
         {
             Parameters = parameters;
         }

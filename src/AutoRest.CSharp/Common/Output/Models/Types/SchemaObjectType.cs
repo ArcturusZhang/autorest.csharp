@@ -10,6 +10,7 @@ using AutoRest.CSharp.Common.Decorator;
 using AutoRest.CSharp.Common.Input;
 using AutoRest.CSharp.Common.Output.Models.Types;
 using AutoRest.CSharp.Generation.Types;
+using AutoRest.CSharp.Generation.Writers;
 using AutoRest.CSharp.Input;
 using AutoRest.CSharp.Input.Source;
 using AutoRest.CSharp.Mgmt.Output;
@@ -265,7 +266,8 @@ namespace AutoRest.CSharp.Output.Models.Types
             var baseInitializers = ConstructorInitializer.ParametersToFormattableString(parametersToPassToBase).ToArray();
             if (Discriminator?.Value is not null && this != Discriminator?.DefaultObjectType)
             {
-                FormattableString discriminatorInitializer = Discriminator!.Value.Value.Type.Equals(typeof(string)) ? (FormattableString)$"\"{Discriminator.Value.Value.Value}\"" : (FormattableString)$"{Discriminator.Value.Value.Value}";
+                //FormattableString discriminatorInitializer = Discriminator!.Value.Value.Type.Equals(typeof(string)) ? (FormattableString)$"\"{Discriminator.Value.Value.Value}\"" : (FormattableString)$"{Discriminator.Value.Value.Value}";
+                FormattableString discriminatorInitializer = Discriminator!.Value.Value.GetConstantFormattable();
                 for (int i = 0; i < baseInitializers.Length; i++)
                 {
                     if (baseInitializers[i].ToString() == Discriminator.SerializedName)
@@ -461,15 +463,11 @@ namespace AutoRest.CSharp.Output.Models.Types
         {
             // Skip initialization ctor if this instance is used to support forward compatibility in polymorphism.
             if (!SkipInitializerConstructor)
-            {
                 yield return InitializationConstructor;
-            }
 
             // Skip serialization ctor if they are the same
-            if (InitializationConstructor != SerializationConstructor)
-            {
+            if (InitializationConstructorSignature != SerializationConstructorSignature)
                 yield return SerializationConstructor;
-            }
         }
 
         protected override ObjectTypeDiscriminator? BuildDiscriminator()

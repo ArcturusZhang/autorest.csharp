@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of UrlRedirectAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal UrlRedirectAction(string foo, UrlRedirectActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal UrlRedirectAction(string foo, UrlRedirectActionParameters parameters) : base(DeliveryRuleActionType.UrlRedirect, foo)
         {
             Parameters = parameters;
         }

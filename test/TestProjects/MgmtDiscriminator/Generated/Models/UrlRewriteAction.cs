@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of UrlRewriteAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal UrlRewriteAction(string foo, UrlRewriteActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal UrlRewriteAction(string foo, UrlRewriteActionParameters parameters) : base(DeliveryRuleActionType.UrlRewrite, foo)
         {
             Parameters = parameters;
         }

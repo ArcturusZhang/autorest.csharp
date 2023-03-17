@@ -26,18 +26,6 @@ namespace MgmtDiscriminator.Models
             OriginGroup = originGroup;
         }
 
-        /// <summary> Initializes a new instance of OriginGroupOverrideActionParameters. </summary>
-        /// <param name="typeName"></param>
-        /// <param name="originGroup"> defines the OriginGroup that would override the DefaultOriginGroup. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="originGroup"/> is null. </exception>
-        public OriginGroupOverrideActionParameters(OriginGroupOverrideActionParametersTypeName typeName, WritableSubResource originGroup)
-        {
-            Argument.AssertNotNull(originGroup, nameof(originGroup));
-
-            TypeName = typeName;
-            OriginGroup = originGroup;
-        }
-
         /// <summary> Gets or sets the type name. </summary>
         public OriginGroupOverrideActionParametersTypeName TypeName { get; set; }
         /// <summary> defines the OriginGroup that would override the DefaultOriginGroup. </summary>

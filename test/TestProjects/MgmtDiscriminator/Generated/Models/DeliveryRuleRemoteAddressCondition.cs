@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of DeliveryRuleRemoteAddressCondition. </summary>
         /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        internal DeliveryRuleRemoteAddressCondition(string foo, RemoteAddressMatchConditionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal DeliveryRuleRemoteAddressCondition(string foo, RemoteAddressMatchConditionParameters parameters) : base(MatchVariable.RemoteAddress, foo)
         {
             Parameters = parameters;
         }

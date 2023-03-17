@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of DeliveryRuleResponseHeaderAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal DeliveryRuleResponseHeaderAction(string foo, HeaderActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal DeliveryRuleResponseHeaderAction(string foo, HeaderActionParameters parameters) : base(DeliveryRuleActionType.ModifyResponseHeader, foo)
         {
             Parameters = parameters;
         }

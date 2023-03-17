@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of DeliveryRuleCacheKeyQueryStringAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal DeliveryRuleCacheKeyQueryStringAction(string foo, CacheKeyQueryStringActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal DeliveryRuleCacheKeyQueryStringAction(string foo, CacheKeyQueryStringActionParameters parameters) : base(DeliveryRuleActionType.CacheKeyQueryString, foo)
         {
             Parameters = parameters;
         }

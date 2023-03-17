@@ -19,7 +19,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of Dog. </summary>
         /// <param name="id"> The Id of the pet. </param>
         /// <param name="bark"> A dog can bark. </param>
-        internal Dog(string id, string bark) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, id)
+        internal Dog(string id, string bark) : base(PetKind.Dog, id)
         {
             Bark = bark;
         }

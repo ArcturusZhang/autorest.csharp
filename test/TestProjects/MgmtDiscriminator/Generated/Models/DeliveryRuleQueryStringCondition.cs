@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of DeliveryRuleQueryStringCondition. </summary>
         /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        internal DeliveryRuleQueryStringCondition(string foo, QueryStringMatchConditionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal DeliveryRuleQueryStringCondition(string foo, QueryStringMatchConditionParameters parameters) : base(MatchVariable.QueryString, foo)
         {
             Parameters = parameters;
         }

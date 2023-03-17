@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of DeliveryRuleCacheExpirationAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal DeliveryRuleCacheExpirationAction(string foo, CacheExpirationActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal DeliveryRuleCacheExpirationAction(string foo, CacheExpirationActionParameters parameters) : base(DeliveryRuleActionType.CacheExpiration, foo)
         {
             Parameters = parameters;
         }

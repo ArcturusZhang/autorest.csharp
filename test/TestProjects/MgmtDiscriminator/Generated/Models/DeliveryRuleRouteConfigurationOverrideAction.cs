@@ -27,7 +27,7 @@ namespace MgmtDiscriminator.Models
         /// <summary> Initializes a new instance of DeliveryRuleRouteConfigurationOverrideAction. </summary>
         /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        internal DeliveryRuleRouteConfigurationOverrideAction(string foo, RouteConfigurationOverrideActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
+        internal DeliveryRuleRouteConfigurationOverrideAction(string foo, RouteConfigurationOverrideActionParameters parameters) : base(DeliveryRuleActionType.RouteConfigurationOverride, foo)
         {
             Parameters = parameters;
         }
