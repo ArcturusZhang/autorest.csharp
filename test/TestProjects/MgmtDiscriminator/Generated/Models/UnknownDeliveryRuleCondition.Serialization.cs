@@ -41,7 +41,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new UnknownDeliveryRuleCondition();
+            return new UnknownDeliveryRuleCondition(name, foo.Value);
         }
     }
 }

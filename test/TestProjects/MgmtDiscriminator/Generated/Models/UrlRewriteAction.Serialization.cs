@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new UrlRewriteAction(parameters);
+            return new UrlRewriteAction(foo.Value, parameters);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new DeliveryRuleCacheExpirationAction(parameters);
+            return new DeliveryRuleCacheExpirationAction(foo.Value, parameters);
         }
     }
 }

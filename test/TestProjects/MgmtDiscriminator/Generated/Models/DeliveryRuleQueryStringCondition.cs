@@ -25,12 +25,10 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleQueryStringCondition. </summary>
+        /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
-        protected DeliveryRuleQueryStringCondition(QueryStringMatchConditionParameters parameters)
+        internal DeliveryRuleQueryStringCondition(string foo, QueryStringMatchConditionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
         {
-            Argument.AssertNotNull(parameters, nameof(parameters));
-
             Parameters = parameters;
         }
 

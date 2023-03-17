@@ -25,12 +25,10 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleResponseHeaderAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
-        protected DeliveryRuleResponseHeaderAction(HeaderActionParameters parameters)
+        internal DeliveryRuleResponseHeaderAction(string foo, HeaderActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
         {
-            Argument.AssertNotNull(parameters, nameof(parameters));
-
             Parameters = parameters;
         }
 

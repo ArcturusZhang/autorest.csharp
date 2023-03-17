@@ -49,7 +49,7 @@ namespace MgmtDiscriminator.Models
                     continue;
                 }
             }
-            return new DeliveryRuleRouteConfigurationOverrideAction(parameters);
+            return new DeliveryRuleRouteConfigurationOverrideAction(foo.Value, parameters);
         }
     }
 }

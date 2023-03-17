@@ -25,12 +25,10 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of UrlRedirectAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
-        protected UrlRedirectAction(UrlRedirectActionParameters parameters)
+        internal UrlRedirectAction(string foo, UrlRedirectActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
         {
-            Argument.AssertNotNull(parameters, nameof(parameters));
-
             Parameters = parameters;
         }
 

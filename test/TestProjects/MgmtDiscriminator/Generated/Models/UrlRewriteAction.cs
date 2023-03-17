@@ -25,12 +25,10 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of UrlRewriteAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
-        protected UrlRewriteAction(UrlRewriteActionParameters parameters)
+        internal UrlRewriteAction(string foo, UrlRewriteActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
         {
-            Argument.AssertNotNull(parameters, nameof(parameters));
-
             Parameters = parameters;
         }
 

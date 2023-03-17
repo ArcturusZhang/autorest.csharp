@@ -11,7 +11,9 @@ namespace MgmtDiscriminator.Models
     internal partial class UnknownDeliveryRuleCondition : DeliveryRuleCondition
     {
         /// <summary> Initializes a new instance of UnknownDeliveryRuleCondition. </summary>
-        protected UnknownDeliveryRuleCondition()
+        /// <param name="name"> The name of the condition for the delivery rule. </param>
+        /// <param name="foo"> For test. </param>
+        internal UnknownDeliveryRuleCondition(MatchVariable name, string foo) : base(name, foo)
         {
         }
     }

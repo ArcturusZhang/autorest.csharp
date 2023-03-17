@@ -25,12 +25,10 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRouteConfigurationOverrideAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
-        protected DeliveryRuleRouteConfigurationOverrideAction(RouteConfigurationOverrideActionParameters parameters)
+        internal DeliveryRuleRouteConfigurationOverrideAction(string foo, RouteConfigurationOverrideActionParameters parameters) : base(AutoRest.CSharp.Output.Models.Types.EnumTypeValue, foo)
         {
-            Argument.AssertNotNull(parameters, nameof(parameters));
-
             Parameters = parameters;
         }
 

@@ -11,7 +11,9 @@ namespace MgmtDiscriminator.Models
     internal partial class UnknownPet : Pet
     {
         /// <summary> Initializes a new instance of UnknownPet. </summary>
-        protected UnknownPet()
+        /// <param name="kind"> The kind of the pet. </param>
+        /// <param name="id"> The Id of the pet. </param>
+        internal UnknownPet(PetKind kind, string id) : base(kind, id)
         {
         }
     }

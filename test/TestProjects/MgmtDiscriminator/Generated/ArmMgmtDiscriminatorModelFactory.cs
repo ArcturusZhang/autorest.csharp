@@ -5,7 +5,6 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Azure.Core;
@@ -36,11 +35,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleCondition"/> instance for mocking. </returns>
         public static DeliveryRuleCondition DeliveryRuleCondition(string name = "Unknown", string foo = null)
         {
-            return new UnknownDeliveryRuleCondition()
-            {
-                Name = name,
-                Foo = foo
-            };
+            return new UnknownDeliveryRuleCondition(name, foo);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleAction. </summary>
@@ -57,11 +52,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.Pet"/> instance for mocking. </returns>
         public static Pet Pet(string id = null)
         {
-            return new UnknownPet()
-            {
-                Id = id,
-                Kind = default
-            };
+            return new UnknownPet(default, id);
         }
 
         /// <summary> Initializes a new instance of Cat. </summary>
@@ -89,204 +80,144 @@ namespace MgmtDiscriminator.Models
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRemoteAddressCondition. </summary>
+        /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleRemoteAddressCondition"/> instance for mocking. </returns>
-        public static DeliveryRuleRemoteAddressCondition DeliveryRuleRemoteAddressCondition(RemoteAddressMatchConditionParameters parameters = null)
+        public static DeliveryRuleRemoteAddressCondition DeliveryRuleRemoteAddressCondition(string foo = null, RemoteAddressMatchConditionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleRemoteAddressCondition(parameters)
+            return new DeliveryRuleRemoteAddressCondition(foo, parameters)
             {
                 Name = MatchVariable.RemoteAddress
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRequestMethodCondition. </summary>
+        /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleRequestMethodCondition"/> instance for mocking. </returns>
-        public static DeliveryRuleRequestMethodCondition DeliveryRuleRequestMethodCondition(RequestMethodMatchConditionParameters parameters = null)
+        public static DeliveryRuleRequestMethodCondition DeliveryRuleRequestMethodCondition(string foo = null, RequestMethodMatchConditionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleRequestMethodCondition(parameters)
+            return new DeliveryRuleRequestMethodCondition(foo, parameters)
             {
                 Name = MatchVariable.RequestMethod
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleQueryStringCondition. </summary>
+        /// <param name="foo"> For test. </param>
         /// <param name="parameters"> Defines the parameters for the condition. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleQueryStringCondition"/> instance for mocking. </returns>
-        public static DeliveryRuleQueryStringCondition DeliveryRuleQueryStringCondition(QueryStringMatchConditionParameters parameters = null)
+        public static DeliveryRuleQueryStringCondition DeliveryRuleQueryStringCondition(string foo = null, QueryStringMatchConditionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleQueryStringCondition(parameters)
+            return new DeliveryRuleQueryStringCondition(foo, parameters)
             {
                 Name = MatchVariable.QueryString
             };
         }
 
         /// <summary> Initializes a new instance of UrlRedirectAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.UrlRedirectAction"/> instance for mocking. </returns>
-        public static UrlRedirectAction UrlRedirectAction(UrlRedirectActionParameters parameters = null)
+        public static UrlRedirectAction UrlRedirectAction(string foo = null, UrlRedirectActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new UrlRedirectAction(parameters)
+            return new UrlRedirectAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.UrlRedirect
             };
         }
 
         /// <summary> Initializes a new instance of UrlSigningAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.UrlSigningAction"/> instance for mocking. </returns>
-        public static UrlSigningAction UrlSigningAction(UrlSigningActionParameters parameters = null)
+        public static UrlSigningAction UrlSigningAction(string foo = null, UrlSigningActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new UrlSigningAction(parameters)
+            return new UrlSigningAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.UrlSigning
             };
         }
 
         /// <summary> Initializes a new instance of OriginGroupOverrideAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.OriginGroupOverrideAction"/> instance for mocking. </returns>
-        public static OriginGroupOverrideAction OriginGroupOverrideAction(OriginGroupOverrideActionParameters parameters = null)
+        public static OriginGroupOverrideAction OriginGroupOverrideAction(string foo = null, OriginGroupOverrideActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new OriginGroupOverrideAction(parameters)
+            return new OriginGroupOverrideAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.OriginGroupOverride
             };
         }
 
         /// <summary> Initializes a new instance of UrlRewriteAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.UrlRewriteAction"/> instance for mocking. </returns>
-        public static UrlRewriteAction UrlRewriteAction(UrlRewriteActionParameters parameters = null)
+        public static UrlRewriteAction UrlRewriteAction(string foo = null, UrlRewriteActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new UrlRewriteAction(parameters)
+            return new UrlRewriteAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.UrlRewrite
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRequestHeaderAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleRequestHeaderAction"/> instance for mocking. </returns>
-        public static DeliveryRuleRequestHeaderAction DeliveryRuleRequestHeaderAction(HeaderActionParameters parameters = null)
+        public static DeliveryRuleRequestHeaderAction DeliveryRuleRequestHeaderAction(string foo = null, HeaderActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleRequestHeaderAction(parameters)
+            return new DeliveryRuleRequestHeaderAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.ModifyRequestHeader
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleResponseHeaderAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleResponseHeaderAction"/> instance for mocking. </returns>
-        public static DeliveryRuleResponseHeaderAction DeliveryRuleResponseHeaderAction(HeaderActionParameters parameters = null)
+        public static DeliveryRuleResponseHeaderAction DeliveryRuleResponseHeaderAction(string foo = null, HeaderActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleResponseHeaderAction(parameters)
+            return new DeliveryRuleResponseHeaderAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.ModifyResponseHeader
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleCacheExpirationAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleCacheExpirationAction"/> instance for mocking. </returns>
-        public static DeliveryRuleCacheExpirationAction DeliveryRuleCacheExpirationAction(CacheExpirationActionParameters parameters = null)
+        public static DeliveryRuleCacheExpirationAction DeliveryRuleCacheExpirationAction(string foo = null, CacheExpirationActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleCacheExpirationAction(parameters)
+            return new DeliveryRuleCacheExpirationAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.CacheExpiration
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleCacheKeyQueryStringAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleCacheKeyQueryStringAction"/> instance for mocking. </returns>
-        public static DeliveryRuleCacheKeyQueryStringAction DeliveryRuleCacheKeyQueryStringAction(CacheKeyQueryStringActionParameters parameters = null)
+        public static DeliveryRuleCacheKeyQueryStringAction DeliveryRuleCacheKeyQueryStringAction(string foo = null, CacheKeyQueryStringActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleCacheKeyQueryStringAction(parameters)
+            return new DeliveryRuleCacheKeyQueryStringAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.CacheKeyQueryString
             };
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRouteConfigurationOverrideAction. </summary>
+        /// <param name="foo"> for test. </param>
         /// <param name="parameters"> Defines the parameters for the action. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="parameters"/> is null. </exception>
         /// <returns> A new <see cref="Models.DeliveryRuleRouteConfigurationOverrideAction"/> instance for mocking. </returns>
-        public static DeliveryRuleRouteConfigurationOverrideAction DeliveryRuleRouteConfigurationOverrideAction(RouteConfigurationOverrideActionParameters parameters = null)
+        public static DeliveryRuleRouteConfigurationOverrideAction DeliveryRuleRouteConfigurationOverrideAction(string foo = null, RouteConfigurationOverrideActionParameters parameters = null)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            return new DeliveryRuleRouteConfigurationOverrideAction(parameters)
+            return new DeliveryRuleRouteConfigurationOverrideAction(foo, parameters)
             {
                 Name = DeliveryRuleActionType.RouteConfigurationOverride
             };
