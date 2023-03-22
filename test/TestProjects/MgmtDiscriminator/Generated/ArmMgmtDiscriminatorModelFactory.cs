@@ -61,10 +61,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.Cat"/> instance for mocking. </returns>
         public static Cat Cat(string id = null, string meow = null)
         {
-            return new Cat(id, meow)
-            {
-                Kind = PetKind.Cat
-            };
+            return new Cat(id, meow);
         }
 
         /// <summary> Initializes a new instance of Dog. </summary>
@@ -73,10 +70,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.Dog"/> instance for mocking. </returns>
         public static Dog Dog(string id = null, string bark = null)
         {
-            return new Dog(id, bark)
-            {
-                Kind = PetKind.Dog
-            };
+            return new Dog(id, bark);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRemoteAddressCondition. </summary>
@@ -85,10 +79,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleRemoteAddressCondition"/> instance for mocking. </returns>
         public static DeliveryRuleRemoteAddressCondition DeliveryRuleRemoteAddressCondition(string foo = null, RemoteAddressMatchConditionParameters parameters = null)
         {
-            return new DeliveryRuleRemoteAddressCondition(foo, parameters)
-            {
-                Name = MatchVariable.RemoteAddress
-            };
+            return new DeliveryRuleRemoteAddressCondition(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRequestMethodCondition. </summary>
@@ -97,10 +88,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleRequestMethodCondition"/> instance for mocking. </returns>
         public static DeliveryRuleRequestMethodCondition DeliveryRuleRequestMethodCondition(string foo = null, RequestMethodMatchConditionParameters parameters = null)
         {
-            return new DeliveryRuleRequestMethodCondition(foo, parameters)
-            {
-                Name = MatchVariable.RequestMethod
-            };
+            return new DeliveryRuleRequestMethodCondition(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleQueryStringCondition. </summary>
@@ -109,10 +97,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleQueryStringCondition"/> instance for mocking. </returns>
         public static DeliveryRuleQueryStringCondition DeliveryRuleQueryStringCondition(string foo = null, QueryStringMatchConditionParameters parameters = null)
         {
-            return new DeliveryRuleQueryStringCondition(foo, parameters)
-            {
-                Name = MatchVariable.QueryString
-            };
+            return new DeliveryRuleQueryStringCondition(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of UrlRedirectAction. </summary>
@@ -121,10 +106,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.UrlRedirectAction"/> instance for mocking. </returns>
         public static UrlRedirectAction UrlRedirectAction(string foo = null, UrlRedirectActionParameters parameters = null)
         {
-            return new UrlRedirectAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.UrlRedirect
-            };
+            return new UrlRedirectAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of UrlSigningAction. </summary>
@@ -133,10 +115,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.UrlSigningAction"/> instance for mocking. </returns>
         public static UrlSigningAction UrlSigningAction(string foo = null, UrlSigningActionParameters parameters = null)
         {
-            return new UrlSigningAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.UrlSigning
-            };
+            return new UrlSigningAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of OriginGroupOverrideAction. </summary>
@@ -145,10 +124,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.OriginGroupOverrideAction"/> instance for mocking. </returns>
         public static OriginGroupOverrideAction OriginGroupOverrideAction(string foo = null, OriginGroupOverrideActionParameters parameters = null)
         {
-            return new OriginGroupOverrideAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.OriginGroupOverride
-            };
+            return new OriginGroupOverrideAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of UrlRewriteAction. </summary>
@@ -157,10 +133,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.UrlRewriteAction"/> instance for mocking. </returns>
         public static UrlRewriteAction UrlRewriteAction(string foo = null, UrlRewriteActionParameters parameters = null)
         {
-            return new UrlRewriteAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.UrlRewrite
-            };
+            return new UrlRewriteAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRequestHeaderAction. </summary>
@@ -169,10 +142,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleRequestHeaderAction"/> instance for mocking. </returns>
         public static DeliveryRuleRequestHeaderAction DeliveryRuleRequestHeaderAction(string foo = null, HeaderActionParameters parameters = null)
         {
-            return new DeliveryRuleRequestHeaderAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.ModifyRequestHeader
-            };
+            return new DeliveryRuleRequestHeaderAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleResponseHeaderAction. </summary>
@@ -181,10 +151,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleResponseHeaderAction"/> instance for mocking. </returns>
         public static DeliveryRuleResponseHeaderAction DeliveryRuleResponseHeaderAction(string foo = null, HeaderActionParameters parameters = null)
         {
-            return new DeliveryRuleResponseHeaderAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.ModifyResponseHeader
-            };
+            return new DeliveryRuleResponseHeaderAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleCacheExpirationAction. </summary>
@@ -193,10 +160,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleCacheExpirationAction"/> instance for mocking. </returns>
         public static DeliveryRuleCacheExpirationAction DeliveryRuleCacheExpirationAction(string foo = null, CacheExpirationActionParameters parameters = null)
         {
-            return new DeliveryRuleCacheExpirationAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.CacheExpiration
-            };
+            return new DeliveryRuleCacheExpirationAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleCacheKeyQueryStringAction. </summary>
@@ -205,10 +169,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleCacheKeyQueryStringAction"/> instance for mocking. </returns>
         public static DeliveryRuleCacheKeyQueryStringAction DeliveryRuleCacheKeyQueryStringAction(string foo = null, CacheKeyQueryStringActionParameters parameters = null)
         {
-            return new DeliveryRuleCacheKeyQueryStringAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.CacheKeyQueryString
-            };
+            return new DeliveryRuleCacheKeyQueryStringAction(foo, parameters);
         }
 
         /// <summary> Initializes a new instance of DeliveryRuleRouteConfigurationOverrideAction. </summary>
@@ -217,10 +178,7 @@ namespace MgmtDiscriminator.Models
         /// <returns> A new <see cref="Models.DeliveryRuleRouteConfigurationOverrideAction"/> instance for mocking. </returns>
         public static DeliveryRuleRouteConfigurationOverrideAction DeliveryRuleRouteConfigurationOverrideAction(string foo = null, RouteConfigurationOverrideActionParameters parameters = null)
         {
-            return new DeliveryRuleRouteConfigurationOverrideAction(foo, parameters)
-            {
-                Name = DeliveryRuleActionType.RouteConfigurationOverride
-            };
+            return new DeliveryRuleRouteConfigurationOverrideAction(foo, parameters);
         }
     }
 }

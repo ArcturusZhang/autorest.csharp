@@ -30,7 +30,7 @@ namespace MgmtDiscriminator.Models
         /// <param name="requiredCollection"></param>
         internal DerivedModel(string optionalString, IList<string> requiredCollection) : base(optionalString)
         {
-            RequiredCollection = requiredCollection;
+            RequiredCollection = requiredCollection.ToList();
         }
 
         /// <summary> Gets the required collection. </summary>
