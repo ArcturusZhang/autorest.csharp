@@ -86,16 +86,7 @@ namespace AutoRest.CSharp.Generation.Writers
             if (model.Discriminator is { } discriminator && !Configuration.ModelFactoryForHlc.Contains(model.Declaration.Name))
             {
                 var discriminatorProperty = discriminator.Property;
-                if (discriminator.Value is Constant discriminatorValue)
-                {
-                    //initializers.Add(discriminatorProperty,
-                    //    new PropertyInitializer(
-                    //        discriminatorProperty.Declaration.Name,
-                    //        discriminatorProperty.Declaration.Type,
-                    //        discriminatorProperty.IsReadOnly,
-                    //        GetDiscriminatorValue(discriminatorProperty.Declaration.Type, discriminatorValue)));
-                }
-                else
+                if (discriminator.Value is null)
                 {
                     if (model.Declaration.IsAbstract)
                     {
