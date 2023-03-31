@@ -17,10 +17,11 @@ namespace ModelsInCadl.Models
         /// <param name="requiredPropertyOnBase"> Required property on base. </param>
         /// <param name="requiredString"> Required string. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="requiredString"/> is null. </exception>
-        public DerivedModelWithDiscriminatorA(int requiredPropertyOnBase, string requiredString) : base("A", requiredPropertyOnBase)
+        public DerivedModelWithDiscriminatorA(int requiredPropertyOnBase, string requiredString) : base(requiredPropertyOnBase)
         {
             Argument.AssertNotNull(requiredString, nameof(requiredString));
 
+            DiscriminatorProperty = "A";
             RequiredString = requiredString;
         }
 

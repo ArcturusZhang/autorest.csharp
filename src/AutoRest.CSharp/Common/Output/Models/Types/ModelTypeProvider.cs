@@ -64,7 +64,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             DefaultAccessibility = inputModel.Accessibility ?? "public";
             _deprecated = inputModel.Deprecated;
             _derivedTypes = derivedTypes;
-            _defaultDerivedType = defaultDerivedType ?? (inputModel.IsDefaultDiscriminator ? this : null);
+            _defaultDerivedType = defaultDerivedType ?? (inputModel.IsUnknownDiscriminatorModel ? this : null);
         }
 
         private MethodSignatureModifiers GetFromResponseModifiers()
@@ -121,20 +121,10 @@ namespace AutoRest.CSharp.Output.Models.Types
             var serializationCtorSignature = CreateSerializationConstructorSignature(Declaration.Name, Fields.PublicConstructorParameters, Fields.SerializationParameters);
 
             // verifies if this new ctor is the same as the public one
-            if (!serializationCtorSignature.Parameters.Any(p => TypeFactory.IsList(p.Type)) && InitializationConstructorSignature.Parameters.SequenceEqual(serializationCtorSignature.Parameters, new ParameterByTypeEqualityComparer()))
+            if (!serializationCtorSignature.Parameters.Any(p => TypeFactory.IsList(p.Type)) && InitializationConstructorSignature.Parameters.SequenceEqual(serializationCtorSignature.Parameters, Parameter.EqualityComparerByType))
                 return InitializationConstructorSignature;
 
             return serializationCtorSignature;
-        }
-
-        private struct ParameterByTypeEqualityComparer : IEqualityComparer<Parameter>
-        {
-            public bool Equals(Parameter? x, Parameter? y)
-            {
-                return Object.Equals(x?.Type, y?.Type);
-            }
-
-            public int GetHashCode([DisallowNull] Parameter obj) => obj.Type.GetHashCode();
         }
 
         private IEnumerable<JsonPropertySerialization> CreatePropertySerializations()
@@ -253,7 +243,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             {
                 var ctor = isInitializer ? parent.InitializationConstructor : parent.SerializationConstructor;
                 parametersToPassToBase = ctor.Signature.Parameters;
-                fullParameterList.AddRange(_inputModel.IsDefaultDiscriminator ? parametersToPassToBase : parametersToPassToBase.Where(p => p.Name != Discriminator?.SerializedName));
+                fullParameterList.AddRange(_inputModel.IsUnknownDiscriminatorModel ? parametersToPassToBase : parametersToPassToBase.Where(p => p.Name != Discriminator?.SerializedName));
             }
             fullParameterList.AddRange(parameters.Select(creator));
         }
@@ -261,9 +251,9 @@ namespace AutoRest.CSharp.Output.Models.Types
         private FormattableString[] GetInitializersFromParameters(IEnumerable<Parameter> parametersToPassToBase)
         {
             var baseInitializers = ConstructorInitializer.ParametersToFormattableString(parametersToPassToBase).ToArray();
-            if (Discriminator?.Value is not null && !_inputModel.IsDefaultDiscriminator)
+            if (Discriminator is not null && Discriminator.Value is { } discriminatorValue && !_inputModel.IsUnknownDiscriminatorModel)
             {
-                FormattableString discriminatorInitializer = Discriminator.Value.Value.GetConstantFormattable();
+                FormattableString discriminatorInitializer = discriminatorValue.GetConstantFormattable();
                 for (int i = 0; i < baseInitializers.Length; i++)
                 {
                     if (baseInitializers[i].ToString() == Discriminator.SerializedName)
@@ -284,19 +274,24 @@ namespace AutoRest.CSharp.Output.Models.Types
         {
             ObjectTypeConstructor? baseCtor = GetBaseObjectType()?.InitializationConstructor;
 
-            return new ObjectTypeConstructor(InitializationConstructorSignature, GetPropertyInitializers(InitializationConstructorSignature.Parameters), baseCtor);
+            return new ObjectTypeConstructor(InitializationConstructorSignature, GetPropertyInitializers(InitializationConstructorSignature.Parameters, true), baseCtor);
         }
 
         protected override ObjectTypeConstructor BuildSerializationConstructor()
         {
             ObjectTypeConstructor? baseCtor = GetBaseObjectType()?.SerializationConstructor;
 
-            return new ObjectTypeConstructor(SerializationConstructorSignature, GetPropertyInitializers(SerializationConstructorSignature.Parameters), baseCtor);
+            return new ObjectTypeConstructor(SerializationConstructorSignature, GetPropertyInitializers(SerializationConstructorSignature.Parameters, false), baseCtor);
         }
 
-        private ObjectPropertyInitializer[] GetPropertyInitializers(IReadOnlyList<Parameter> parameters)
+        private ObjectPropertyInitializer[] GetPropertyInitializers(IReadOnlyList<Parameter> parameters, bool includeDiscriminator)
         {
             List<ObjectPropertyInitializer> defaultCtorInitializers = new List<ObjectPropertyInitializer>();
+
+            if (includeDiscriminator && Discriminator is not null && Discriminator.Value is { } discriminatorValue && !_inputModel.IsUnknownDiscriminatorModel)
+            {
+                defaultCtorInitializers.Add(new ObjectPropertyInitializer(Discriminator.Property, discriminatorValue));
+            }
 
             Dictionary<string, Parameter> parameterMap = parameters.ToDictionary(
                 parameter => parameter.Name,
@@ -304,7 +299,7 @@ namespace AutoRest.CSharp.Output.Models.Types
 
             foreach (var property in Properties)
             {
-                ReferenceOrConstant? initializationValue;
+                ReferenceOrConstant? initializationValue = null;
                 Constant? defaultInitializationValue = null;
 
                 var propertyType = property.Declaration.Type;
@@ -339,8 +334,6 @@ namespace AutoRest.CSharp.Output.Models.Types
                 }
                 else
                 {
-                    initializationValue = null;// need to get discriminator value from here GetPropertyDefaultValue(property);
-
                     if (initializationValue == null && TypeFactory.IsCollectionType(propertyType))
                     {
                         initializationValue = Constant.NewInstanceOf(TypeFactory.GetPropertyImplementationType(propertyType));

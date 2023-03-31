@@ -15,11 +15,9 @@ namespace ModelsInCadl.Models
     public abstract partial class BaseModelWithDiscriminator
     {
         /// <summary> Initializes a new instance of BaseModelWithDiscriminator. </summary>
-        /// <param name="discriminatorProperty"> Discriminator. </param>
         /// <param name="requiredPropertyOnBase"> Required property on base. </param>
-        protected BaseModelWithDiscriminator(string discriminatorProperty, int requiredPropertyOnBase)
+        protected BaseModelWithDiscriminator(int requiredPropertyOnBase)
         {
-            DiscriminatorProperty = discriminatorProperty;
             RequiredPropertyOnBase = requiredPropertyOnBase;
         }
 
@@ -35,7 +33,7 @@ namespace ModelsInCadl.Models
         }
 
         /// <summary> Discriminator. </summary>
-        public string DiscriminatorProperty { get; }
+        public string DiscriminatorProperty { get; internal protected set; }
         /// <summary> Optional property on base. </summary>
         public string OptionalPropertyOnBase { get; set; }
         /// <summary> Required property on base. </summary>
