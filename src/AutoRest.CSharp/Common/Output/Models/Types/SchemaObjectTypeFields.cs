@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+// Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
 using System.Collections;
@@ -11,6 +11,7 @@ using AutoRest.CSharp.Generation.Types;
 using AutoRest.CSharp.Generation.Writers;
 using AutoRest.CSharp.Input;
 using AutoRest.CSharp.Input.Source;
+using AutoRest.CSharp.Output.Builders;
 using AutoRest.CSharp.Output.Models.Shared;
 using AutoRest.CSharp.Utilities;
 using Microsoft.CodeAnalysis;
@@ -18,10 +19,10 @@ using static AutoRest.CSharp.Output.Models.FieldModifiers;
 
 namespace AutoRest.CSharp.Output.Models.Types
 {
-    internal sealed class ModelTypeProviderFields : IObjectTypeFields<InputModelProperty>
+    internal class SchemaObjectTypeFields : IObjectTypeFields<Property>
     {
         private readonly IReadOnlyList<FieldDeclaration> _fields;
-        private readonly IReadOnlyDictionary<FieldDeclaration, InputModelProperty> _fieldsToInputs;
+        private readonly IReadOnlyDictionary<FieldDeclaration, Property> _fieldsToInputs;
         // parameter name should be unique since it's bound to field property
         private readonly IReadOnlyDictionary<string, FieldDeclaration> _parameterNamesToFields;
 
@@ -29,48 +30,48 @@ namespace AutoRest.CSharp.Output.Models.Types
         public IReadOnlyList<Parameter> SerializationParameters { get; }
         public int Count => _fields.Count;
 
-        public ModelTypeProviderFields(InputModelType inputModel, TypeFactory typeFactory, ModelTypeMapping? sourceTypeMapping)
+        public SchemaObjectTypeFields(SchemaObjectType enclosingType, ObjectSchema inputModel, SchemaTypeUsage usage, TypeFactory typeFactory, ModelTypeMapping? sourceTypeMapping)
         {
             var fields = new List<FieldDeclaration>();
-            var fieldsToInputs = new Dictionary<FieldDeclaration, InputModelProperty>();
+            var fieldsToInputs = new Dictionary<FieldDeclaration, Property>();
             var publicParameters = new List<Parameter>();
             var serializationParameters = new List<Parameter>();
             var parametersToFields = new Dictionary<string, FieldDeclaration>();
 
-            string? discriminator = inputModel.DiscriminatorPropertyName;
-            if (discriminator is not null)
-            {
-                var originalFieldName = discriminator.ToCleanName();
-                var inputModelProperty = new InputModelProperty(discriminator, discriminator, "Discriminator", InputPrimitiveType.String, true, false, true);
-                var field = CreateField(originalFieldName, typeof(string), inputModel, inputModelProperty);
-                fields.Add(field);
-                fieldsToInputs[field] = inputModelProperty;
-                var parameter = Parameter.FromModelProperty(inputModelProperty, field.Name.FirstCharToLowerCase(), field.Type);
-                parametersToFields[parameter.Name] = field;
-                serializationParameters.Add(parameter);
-            }
+            //string? discriminator = inputModel.DiscriminatorPropertyName;
+            //if (discriminator is not null)
+            //{
+            //    var originalFieldName = discriminator.ToCleanName();
+            //    var inputModelProperty = new InputModelProperty(discriminator, discriminator, "Discriminator", InputPrimitiveType.String, true, false, true);
+            //    var field = CreateField(originalFieldName, typeof(string), inputModel, inputModelProperty);
+            //    fields.Add(field);
+            //    fieldsToInputs[field] = inputModelProperty;
+            //    var parameter = Parameter.FromModelProperty(inputModelProperty, field.Name.FirstCharToLowerCase(), field.Type);
+            //    parametersToFields[parameter.Name] = field;
+            //    serializationParameters.Add(parameter);
+            //}
 
-            foreach (var inputModelProperty in inputModel.Properties)
+            foreach (var property in inputModel.Properties)
             {
-                var originalFieldName = inputModelProperty.Name.ToCleanName();
-                var originalFieldType = GetPropertyDefaultType(inputModel.Usage, inputModelProperty, typeFactory);
+                var originalFieldName = BuilderHelpers.DisambiguateName(enclosingType.Type, property.CSharpName());
+                var originalFieldType = GetPropertyDefaultType(usage, property, typeFactory);
 
                 var existingMember = sourceTypeMapping?.GetForMember(originalFieldName)?.ExistingMember;
                 var field = existingMember is not null
-                    ? CreateFieldFromExisting(existingMember, originalFieldType, inputModelProperty, typeFactory)
-                    : CreateField(originalFieldName, originalFieldType, inputModel, inputModelProperty);
+                    ? CreateFieldFromExisting(existingMember, originalFieldType, property, typeFactory)
+                    : CreateField(originalFieldName, originalFieldType, inputModel, property, usage);
 
                 fields.Add(field);
-                fieldsToInputs[field] = inputModelProperty;
+                fieldsToInputs[field] = property;
 
-                if (inputModelProperty.Type is InputLiteralType)
+                if (property.Schema is ConstantSchema)
                 {
-                    continue; // literal property does not show up in the constructor parameter list
+                    continue; // literal property does not show up in the constructor parameter list // TODO -- fix this because this is wrong
                 }
-                var parameter = Parameter.FromModelProperty(inputModelProperty, existingMember is IFieldSymbol ? inputModelProperty.Name.ToVariableName() : field.Name.FirstCharToLowerCase(), field.Type);
+                var parameter = Parameter.FromSchemaProperty(property, existingMember is IFieldSymbol ? originalFieldName.ToVariableName() : field.Name.ToVariableName(), field.Type);
                 parametersToFields[parameter.Name] = field;
                 serializationParameters.Add(parameter);
-                if (inputModelProperty.IsRequired && !inputModelProperty.IsReadOnly)
+                if (property.IsRequired && !property.IsReadOnly)
                 {
                     publicParameters.Add(parameter);
                 }
@@ -86,21 +87,19 @@ namespace AutoRest.CSharp.Output.Models.Types
 
         public FieldDeclaration GetFieldByParameter(Parameter parameter) => _parameterNamesToFields[parameter.Name];
         public bool TryGetFieldByParameter(Parameter parameter, [MaybeNullWhen(false)] out FieldDeclaration fieldDeclaration) => _parameterNamesToFields.TryGetValue(parameter.Name, out fieldDeclaration);
-        public InputModelProperty GetInputByField(FieldDeclaration field) => _fieldsToInputs[field];
+        public Property GetInputByField(FieldDeclaration field) => _fieldsToInputs[field];
 
         public IEnumerator<FieldDeclaration> GetEnumerator() => _fields.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private static FieldDeclaration CreateField(string fieldName, CSharpType fieldType, InputModelType inputModel, InputModelProperty inputModelProperty)
+        private static FieldDeclaration CreateField(string fieldName, CSharpType fieldType, ObjectSchema inputModel, Property inputModelProperty, SchemaTypeUsage usage)
         {
-            var propertyIsCollection = inputModelProperty.Type is InputDictionaryType or InputListType ||
-                // This is a temporary work around as we don't convert collection type to InputListType or InputDictionaryType in MPG for now
-                inputModelProperty.Type is CodeModelType type && (type.Schema is ArraySchema or DictionarySchema);
-            var propertyIsRequiredInNonRoundTripModel = inputModel.Usage is InputModelTypeUsage.Input or InputModelTypeUsage.Output && inputModelProperty.IsRequired;
-            var propertyIsOptionalInOutputModel = inputModel.Usage is InputModelTypeUsage.Output && !inputModelProperty.IsRequired;
-            var propertyIsLiteralType = inputModelProperty.Type is InputLiteralType;
+            var propertyIsCollection = inputModelProperty.Schema is ArraySchema or DictionarySchema;
+            var propertyIsRequiredInNonRoundTripModel = !(usage.HasFlag(SchemaTypeUsage.Input) && usage.HasFlag(SchemaTypeUsage.Output)) && inputModelProperty.IsRequired;
+            var propertyIsOptionalInOutputModel = !usage.HasFlag(InputModelTypeUsage.Input) && !inputModelProperty.IsRequired;
+            var propertyIsLiteralType = inputModelProperty.Schema is ConstantSchema;
             var propertyIsReadOnly = inputModelProperty.IsReadOnly || propertyIsLiteralType || propertyIsCollection || propertyIsRequiredInNonRoundTripModel || propertyIsOptionalInOutputModel;
-            var propertyIsDiscriminator = inputModelProperty.IsDiscriminator;
+            var propertyIsDiscriminator = inputModelProperty.IsDiscriminator ?? false;
 
             FieldModifiers fieldModifiers;
             FieldModifiers? setterModifiers = null;
@@ -119,7 +118,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             CodeWriterDeclaration declaration = new CodeWriterDeclaration(fieldName);
             declaration.SetActualName(fieldName);
             return new FieldDeclaration(
-                $"{inputModelProperty.Description}",
+                $"{inputModelProperty.Language.Default.Description}",
                 fieldModifiers,
                 fieldType,
                 declaration,
@@ -130,7 +129,7 @@ namespace AutoRest.CSharp.Output.Models.Types
                 SetterModifiers: setterModifiers);
         }
 
-        private static FieldDeclaration CreateFieldFromExisting(ISymbol existingMember, CSharpType originalType, InputModelProperty inputModelProperty, TypeFactory typeFactory)
+        private static FieldDeclaration CreateFieldFromExisting(ISymbol existingMember, CSharpType originalType, Property inputModelProperty, TypeFactory typeFactory)
         {
             var existingMemberTypeSymbol = existingMember switch
             {
@@ -157,11 +156,11 @@ namespace AutoRest.CSharp.Output.Models.Types
             return new FieldDeclaration($"Must be removed by post-generation processing,", fieldModifiers, fieldType, declaration, GetPropertyDefaultValue(originalType, inputModelProperty), inputModelProperty.IsRequired, existingMember is IFieldSymbol, writeAsProperty);
         }
 
-        private static CSharpType GetPropertyDefaultType(in InputModelTypeUsage modelUsage, in InputModelProperty property, TypeFactory typeFactory)
+        private static CSharpType GetPropertyDefaultType(SchemaTypeUsage usage, Property property, TypeFactory typeFactory)
         {
-            var valueType = typeFactory.CreateType(property.Type);
+            var valueType = typeFactory.CreateType(property.Schema, property.IsNullable, property.Schema is AnyObjectSchema ? property.Extensions?.Format : property.Schema.Extensions?.Format, property: property);
 
-            if (modelUsage == InputModelTypeUsage.Output ||
+            if (!usage.HasFlag(SchemaTypeUsage.Input) ||
                 property.IsReadOnly)
             {
                 valueType = TypeFactory.GetOutputType(valueType);
@@ -175,12 +174,8 @@ namespace AutoRest.CSharp.Output.Models.Types
             return valueType;
         }
 
-        private static FormattableString? GetPropertyDefaultValue(CSharpType propertyType, InputModelProperty inputModelProperty)
+        private static FormattableString? GetPropertyDefaultValue(CSharpType propertyType, Property inputModelProperty)
         {
-            if (inputModelProperty.DefaultValue != null)
-            {
-                return inputModelProperty.DefaultValue;
-            }
             if (TypeFactory.IsCollectionType(propertyType))
             {
                 if (TypeFactory.IsReadOnlyList(propertyType))

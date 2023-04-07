@@ -116,6 +116,14 @@ namespace AutoRest.CSharp.Output.Models.Types
             }
         }
 
+        private IObjectTypeFields<Property>? _fields;
+        public IObjectTypeFields<Property> Fields => _fields ??= EnsureFields();
+
+        private IObjectTypeFields<Property> EnsureFields()
+        {
+            return new SchemaObjectTypeFields(this, ObjectSchema, _usage, _typeFactory, _sourceTypeMapping);
+        }
+
         protected override ObjectTypeConstructor BuildSerializationConstructor()
         {
             bool ownsDiscriminatorProperty = false;
