@@ -26,6 +26,11 @@ namespace AutoRest.CSharp.Mgmt.Output
             _defaultName = $"{ResourceName}ExtensionClient";
         }
 
+        public MgmtExtensionClient(IEnumerable<MgmtExtensions> extensions, string resourceName) : base(resourceName)
+        {
+
+        }
+
         protected override ConstructorSignature? EnsureArmClientCtor()
         {
             return new ConstructorSignature(

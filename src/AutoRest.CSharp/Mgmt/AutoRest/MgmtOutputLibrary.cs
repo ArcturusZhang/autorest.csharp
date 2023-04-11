@@ -80,7 +80,7 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
 
         private CachedDictionary<InputEnumType, EnumType> AllEnumMap { get; }
 
-        private CachedDictionary<string, HashSet<Operation>> ChildOperations { get; }
+        private CachedDictionary<RequestPath, HashSet<Operation>> ChildOperations { get; }
 
         private Dictionary<string, string> _mergedOperations;
 
@@ -117,7 +117,7 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
             ResourceSchemaMap = new CachedDictionary<Schema, TypeProvider>(EnsureResourceSchemaMap);
             SchemaMap = new CachedDictionary<Schema, TypeProvider>(EnsureSchemaMap);
             AllEnumMap = new CachedDictionary<InputEnumType, EnumType>(EnsureAllEnumMap);
-            ChildOperations = new CachedDictionary<string, HashSet<Operation>>(EnsureResourceChildOperations);
+            ChildOperations = new CachedDictionary<RequestPath, HashSet<Operation>>(EnsureResourceChildOperations);
 
             // initialize the property bag collection
             // TODO -- considering provide a customized comparer
@@ -404,26 +404,42 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
         private MgmtExtensions? _managementGroupExtensions;
         private MgmtExtensions? _subscriptionExtensions;
         private MgmtExtensions? _resourceGroupsExtensions;
-        private MgmtExtensions? _armResourceExtensions;
+        private IEnumerable<MgmtExtensions>? _armResourceExtensions;
         public MgmtExtensions TenantExtensions => _tenantExtensions ??= EnsureExtensions(typeof(TenantResource), RequestPath.Tenant);
         public MgmtExtensions SubscriptionExtensions => _subscriptionExtensions ??= EnsureExtensions(typeof(SubscriptionResource), RequestPath.Subscription);
         public MgmtExtensions ResourceGroupExtensions => _resourceGroupsExtensions ??= EnsureExtensions(typeof(ResourceGroupResource), RequestPath.ResourceGroup);
         public MgmtExtensions ManagementGroupExtensions => _managementGroupExtensions ??= EnsureExtensions(typeof(ManagementGroupResource), RequestPath.ManagementGroup);
-        public MgmtExtensions ArmResourceExtensions => _armResourceExtensions ??= EnsureExtensions(typeof(ArmResource), RequestPath.Any);
+        public IEnumerable<MgmtExtensions> ArmResourceExtensions => _armResourceExtensions ??= EnsureArmResourceExtensions();
 
         private MgmtExtensionsWrapper? _extensionsWrapper;
         public MgmtExtensionsWrapper ExtensionWrapper => _extensionsWrapper ??= EnsureExtensionsWrapper();
 
         private MgmtExtensionsWrapper EnsureExtensionsWrapper() => IsArmCore ?
-                new MgmtExtensionsWrapper(new[] { TenantExtensions, ManagementGroupExtensions, ArmResourceExtensions }) :
-                new MgmtExtensionsWrapper(new[] { TenantExtensions, SubscriptionExtensions, ResourceGroupExtensions, ManagementGroupExtensions, ArmResourceExtensions, ArmClientExtensions });
+                new MgmtExtensionsWrapper(new[] { TenantExtensions, ManagementGroupExtensions }.Concat(ArmResourceExtensions)) :
+                new MgmtExtensionsWrapper(new[] { TenantExtensions, SubscriptionExtensions, ResourceGroupExtensions, ManagementGroupExtensions }.Concat(ArmResourceExtensions).Concat(ArmClientExtensions));
 
         private MgmtExtensions EnsureExtensions(Type armCoreType, RequestPath contextualPath)
         {
-            bool shouldGenerateChildren = !Configuration.MgmtConfiguration.IsArmCore || armCoreType.Namespace != MgmtContext.Context.DefaultNamespace;
-            var operations = shouldGenerateChildren ? GetChildOperations(contextualPath) : Enumerable.Empty<Operation>();
+            var operations = ShouldGenerateChildrenForType(armCoreType) ? GetChildOperations(contextualPath) : Enumerable.Empty<Operation>();
             return new MgmtExtensions(operations, armCoreType, contextualPath);
         }
+
+        private IEnumerable<MgmtExtensions> EnsureArmResourceExtensions()
+        {
+            if (ShouldGenerateChildrenForType(typeof(ArmResource)))
+            {
+                foreach (var (parentRequestPath, operations) in ChildOperations)
+                {
+                    if (parentRequestPath.IsParameterizedScope())
+                        yield return new MgmtExtensions(operations, typeof(ArmResource), parentRequestPath);
+                }
+            }
+
+            yield break;
+        }
+
+        private bool ShouldGenerateChildrenForType(Type armCoreType)
+            => !Configuration.MgmtConfiguration.IsArmCore || armCoreType.Namespace != MgmtContext.Context.DefaultNamespace;
 
         private ArmClientExtensions EnsureArmClientExtensions() => new ArmClientExtensions(GetChildOperations(RequestPath.Tenant));
 
@@ -566,9 +582,9 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
             {
                 foreach (var operationSet in operationSets)
                 {
-                    var operations = GetChildOperations(operationSet.RequestPath);
                     // get the corresponding resource data
                     var originalResourcePath = operationSet.GetRequestPath();
+                    var operations = GetChildOperations(originalResourcePath);
                     var resourceData = GetResourceData(originalResourcePath);
                     if (resourceData is EmptyResourceData emptyResourceData)
                         BuildPartialResource(requestPathToResources, resourceDataSchemaName, operationSet, operations, originalResourcePath, emptyResourceData);
@@ -723,24 +739,7 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
             return false;
         }
 
-        private struct RequestPathCollectionEqualityComparer : IEqualityComparer<IEnumerable<RequestPath>>
-        {
-            public bool Equals([AllowNull] IEnumerable<RequestPath> x, [AllowNull] IEnumerable<RequestPath> y)
-            {
-                if (x == null && y == null)
-                    return true;
-                if (x == null || y == null)
-                    return false;
-                return x.SequenceEqual(y);
-            }
-
-            public int GetHashCode([DisallowNull] IEnumerable<RequestPath> obj)
-            {
-                return obj.GetHashCode();
-            }
-        }
-
-        public IEnumerable<Operation> GetChildOperations(string requestPath)
+        public IEnumerable<Operation> GetChildOperations(RequestPath requestPath)
         {
             if (requestPath == RequestPath.Any)
                 return Enumerable.Empty<Operation>();
@@ -751,9 +750,9 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
             return Enumerable.Empty<Operation>();
         }
 
-        private Dictionary<string, HashSet<Operation>> EnsureResourceChildOperations()
+        private Dictionary<RequestPath, HashSet<Operation>> EnsureResourceChildOperations()
         {
-            var childOperations = new Dictionary<string, HashSet<Operation>>();
+            var childOperations = new Dictionary<RequestPath, HashSet<Operation>>();
             foreach (var operationSet in RawRequestPathToOperationSets.Values)
             {
                 if (operationSet.IsResource())
@@ -761,10 +760,7 @@ namespace AutoRest.CSharp.Mgmt.AutoRest
                 foreach (var operation in operationSet)
                 {
                     var parentRequestPath = operation.ParentRequestPath();
-                    if (childOperations.TryGetValue(parentRequestPath, out var list))
-                        list.Add(operation);
-                    else
-                        childOperations.Add(parentRequestPath, new HashSet<Operation> { operation });
+                    childOperations.AddInList(parentRequestPath, operation);
                 }
             }
 
