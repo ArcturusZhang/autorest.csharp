@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class LogAnalytics
     {
         /// <summary> Initializes a new instance of LogAnalytics. </summary>
-        internal LogAnalytics()
+        public LogAnalytics()
         {
         }
 

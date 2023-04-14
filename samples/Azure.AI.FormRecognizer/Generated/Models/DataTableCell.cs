@@ -22,7 +22,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="boundingBox"> Bounding box of the cell. </param>
         /// <param name="confidence"> Confidence value. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="text"/> or <paramref name="boundingBox"/> is null. </exception>
-        internal DataTableCell(int rowIndex, int columnIndex, string text, IEnumerable<float> boundingBox, float confidence)
+        public DataTableCell(int rowIndex, int columnIndex, string text, IEnumerable<float> boundingBox, float confidence)
         {
             Argument.AssertNotNull(text, nameof(text));
             Argument.AssertNotNull(boundingBox, nameof(boundingBox));

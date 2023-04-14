@@ -19,7 +19,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="width"> The width of the image/PDF in pixels/inches, respectively. </param>
         /// <param name="height"> The height of the image/PDF in pixels/inches, respectively. </param>
         /// <param name="unit"> The unit used by the width, height and boundingBox properties. For images, the unit is &quot;pixel&quot;. For PDF, the unit is &quot;inch&quot;. </param>
-        internal ReadResult(int page, float angle, float width, float height, LengthUnit unit)
+        public ReadResult(int page, float angle, float width, float height, LengthUnit unit)
         {
             Page = page;
             Angle = angle;

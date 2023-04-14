@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineExtensionHandlerInstanceView
     {
         /// <summary> Initializes a new instance of VirtualMachineExtensionHandlerInstanceView. </summary>
-        internal VirtualMachineExtensionHandlerInstanceView()
+        public VirtualMachineExtensionHandlerInstanceView()
         {
         }
 

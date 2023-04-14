@@ -5,7 +5,6 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,15 +64,6 @@ namespace Azure.Storage.Tables.Models
         public static StorageServiceStats StorageServiceStats(GeoReplication geoReplication = null)
         {
             return new StorageServiceStats(geoReplication);
-        }
-
-        /// <summary> Initializes a new instance of GeoReplication. </summary>
-        /// <param name="status"> The status of the secondary location. </param>
-        /// <param name="lastSyncTime"> A GMT date/time value, to the second. All primary writes preceding this value are guaranteed to be available for read operations at the secondary. Primary writes after this point in time may or may not be available for reads. </param>
-        /// <returns> A new <see cref="Models.GeoReplication"/> instance for mocking. </returns>
-        public static GeoReplication GeoReplication(GeoReplicationStatusType status = default, DateTimeOffset lastSyncTime = default)
-        {
-            return new GeoReplication(status, lastSyncTime);
         }
     }
 }

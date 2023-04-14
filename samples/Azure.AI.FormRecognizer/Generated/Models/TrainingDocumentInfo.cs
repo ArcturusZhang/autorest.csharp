@@ -21,7 +21,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="errors"> List of errors. </param>
         /// <param name="status"> Status of the training operation. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="documentName"/> or <paramref name="errors"/> is null. </exception>
-        internal TrainingDocumentInfo(string documentName, int pages, IEnumerable<ErrorInformation> errors, TrainStatus status)
+        public TrainingDocumentInfo(string documentName, int pages, IEnumerable<ErrorInformation> errors, TrainStatus status)
         {
             Argument.AssertNotNull(documentName, nameof(documentName));
             Argument.AssertNotNull(errors, nameof(errors));

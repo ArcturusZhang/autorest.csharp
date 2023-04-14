@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineStatusCodeCount
     {
         /// <summary> Initializes a new instance of VirtualMachineStatusCodeCount. </summary>
-        internal VirtualMachineStatusCodeCount()
+        public VirtualMachineStatusCodeCount()
         {
         }
 

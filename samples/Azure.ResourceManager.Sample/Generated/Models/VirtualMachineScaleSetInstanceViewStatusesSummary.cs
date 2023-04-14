@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     internal partial class VirtualMachineScaleSetInstanceViewStatusesSummary
     {
         /// <summary> Initializes a new instance of VirtualMachineScaleSetInstanceViewStatusesSummary. </summary>
-        internal VirtualMachineScaleSetInstanceViewStatusesSummary()
+        public VirtualMachineScaleSetInstanceViewStatusesSummary()
         {
             StatusesSummary = new ChangeTrackingList<VirtualMachineStatusCodeCount>();
         }

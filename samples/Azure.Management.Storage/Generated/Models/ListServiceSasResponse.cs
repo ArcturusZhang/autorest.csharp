@@ -11,7 +11,7 @@ namespace Azure.Management.Storage.Models
     public partial class ListServiceSasResponse
     {
         /// <summary> Initializes a new instance of ListServiceSasResponse. </summary>
-        internal ListServiceSasResponse()
+        public ListServiceSasResponse()
         {
         }
 

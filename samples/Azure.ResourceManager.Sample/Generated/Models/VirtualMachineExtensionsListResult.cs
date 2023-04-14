@@ -18,7 +18,7 @@ namespace Azure.ResourceManager.Sample.Models
     internal partial class VirtualMachineExtensionsListResult
     {
         /// <summary> Initializes a new instance of VirtualMachineExtensionsListResult. </summary>
-        internal VirtualMachineExtensionsListResult()
+        public VirtualMachineExtensionsListResult()
         {
             Value = new ChangeTrackingList<VirtualMachineExtensionData>();
         }

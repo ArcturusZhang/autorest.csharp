@@ -11,7 +11,7 @@ namespace Azure.Management.Storage.Models
     public partial class UsageName
     {
         /// <summary> Initializes a new instance of UsageName. </summary>
-        internal UsageName()
+        public UsageName()
         {
         }
 

@@ -14,7 +14,7 @@ namespace Azure.AI.FormRecognizer.Models
     public partial class Models
     {
         /// <summary> Initializes a new instance of Models. </summary>
-        internal Models()
+        public Models()
         {
             ModelList = new ChangeTrackingList<ModelInfo>();
         }

@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class UpgradeOperationHistoricalStatusInfo
     {
         /// <summary> Initializes a new instance of UpgradeOperationHistoricalStatusInfo. </summary>
-        internal UpgradeOperationHistoricalStatusInfo()
+        public UpgradeOperationHistoricalStatusInfo()
         {
         }
 

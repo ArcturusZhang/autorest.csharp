@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class RetrieveBootDiagnosticsDataResult
     {
         /// <summary> Initializes a new instance of RetrieveBootDiagnosticsDataResult. </summary>
-        internal RetrieveBootDiagnosticsDataResult()
+        public RetrieveBootDiagnosticsDataResult()
         {
         }
 

@@ -20,14 +20,13 @@ namespace body_complex.Models
         /// <summary> Initializes a new instance of Shark. </summary>
         /// <param name="length"></param>
         /// <param name="birthday"></param>
-        public Shark(float length, DateTimeOffset birthday) : base(length)
+        protected Shark(float length, DateTimeOffset birthday) : base(length)
         {
-            Birthday = birthday;
             Fishtype = "shark";
+            Birthday = birthday;
         }
 
         /// <summary> Initializes a new instance of Shark. </summary>
-        /// <param name="fishtype"></param>
         /// <param name="species"></param>
         /// <param name="length"></param>
         /// <param name="siblings">
@@ -36,11 +35,10 @@ namespace body_complex.Models
         /// </param>
         /// <param name="age"></param>
         /// <param name="birthday"></param>
-        internal Shark(string fishtype, string species, float length, IList<Fish> siblings, int? age, DateTimeOffset birthday) : base(fishtype, species, length, siblings)
+        internal Shark(string species, float length, IList<Fish> siblings, int? age, DateTimeOffset birthday) : base("shark", species, length, siblings)
         {
             Age = age;
             Birthday = birthday;
-            Fishtype = fishtype ?? "shark";
         }
 
         /// <summary> Gets or sets the age. </summary>

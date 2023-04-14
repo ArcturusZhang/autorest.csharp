@@ -17,7 +17,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="fieldName"> Training field name. </param>
         /// <param name="accuracy"> Estimated extraction accuracy for this field. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="fieldName"/> is null. </exception>
-        internal FormFieldsReport(string fieldName, float accuracy)
+        public FormFieldsReport(string fieldName, float accuracy)
         {
             Argument.AssertNotNull(fieldName, nameof(fieldName));
 

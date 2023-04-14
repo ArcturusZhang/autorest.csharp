@@ -18,7 +18,7 @@ namespace AdditionalPropertiesEx.Models
         /// <param name="id"></param>
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="additionalProperties"/> is null. </exception>
-        internal OutputAdditionalPropertiesModelStruct(int id, IReadOnlyDictionary<string, string> additionalProperties)
+        public OutputAdditionalPropertiesModelStruct(int id, IReadOnlyDictionary<string, string> additionalProperties)
         {
             Argument.AssertNotNull(additionalProperties, nameof(additionalProperties));
 

@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="status"> Operation status. </param>
         /// <param name="createdDateTime"> Date and time (UTC) when the analyze operation was submitted. </param>
         /// <param name="lastUpdatedDateTime"> Date and time (UTC) when the status was last updated. </param>
-        internal AnalyzeOperationResult(OperationStatus status, DateTimeOffset createdDateTime, DateTimeOffset lastUpdatedDateTime)
+        public AnalyzeOperationResult(OperationStatus status, DateTimeOffset createdDateTime, DateTimeOffset lastUpdatedDateTime)
         {
             Status = status;
             CreatedDateTime = createdDateTime;

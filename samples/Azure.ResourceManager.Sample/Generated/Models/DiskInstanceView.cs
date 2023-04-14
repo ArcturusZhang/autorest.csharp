@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class DiskInstanceView
     {
         /// <summary> Initializes a new instance of DiskInstanceView. </summary>
-        internal DiskInstanceView()
+        public DiskInstanceView()
         {
             EncryptionSettings = new ChangeTrackingList<DiskEncryptionSettings>();
             Statuses = new ChangeTrackingList<InstanceViewStatus>();

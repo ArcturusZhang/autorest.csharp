@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineScaleSetVMExtensionsSummary
     {
         /// <summary> Initializes a new instance of VirtualMachineScaleSetVMExtensionsSummary. </summary>
-        internal VirtualMachineScaleSetVMExtensionsSummary()
+        public VirtualMachineScaleSetVMExtensionsSummary()
         {
             StatusesSummary = new ChangeTrackingList<VirtualMachineStatusCodeCount>();
         }

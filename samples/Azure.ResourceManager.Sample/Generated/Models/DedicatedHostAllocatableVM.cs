@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class DedicatedHostAllocatableVM
     {
         /// <summary> Initializes a new instance of DedicatedHostAllocatableVM. </summary>
-        internal DedicatedHostAllocatableVM()
+        public DedicatedHostAllocatableVM()
         {
         }
 

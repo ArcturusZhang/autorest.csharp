@@ -11,7 +11,7 @@ namespace Azure.Management.Storage.Models
     public partial class CheckNameAvailabilityResult
     {
         /// <summary> Initializes a new instance of CheckNameAvailabilityResult. </summary>
-        internal CheckNameAvailabilityResult()
+        public CheckNameAvailabilityResult()
         {
         }
 

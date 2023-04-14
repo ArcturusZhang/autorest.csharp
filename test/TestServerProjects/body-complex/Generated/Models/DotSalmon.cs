@@ -11,21 +11,19 @@ namespace body_complex.Models
     public partial class DotSalmon : DotFish
     {
         /// <summary> Initializes a new instance of DotSalmon. </summary>
-        internal DotSalmon()
+        public DotSalmon()
         {
             FishType = "DotSalmon";
         }
 
         /// <summary> Initializes a new instance of DotSalmon. </summary>
-        /// <param name="fishType"></param>
         /// <param name="species"></param>
         /// <param name="location"></param>
         /// <param name="iswild"></param>
-        internal DotSalmon(string fishType, string species, string location, bool? iswild) : base(fishType, species)
+        internal DotSalmon(string species, string location, bool? iswild) : base("DotSalmon", species)
         {
             Location = location;
             Iswild = iswild;
-            FishType = fishType ?? "DotSalmon";
         }
 
         /// <summary> Gets the location. </summary>

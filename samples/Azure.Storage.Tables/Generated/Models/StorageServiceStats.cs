@@ -11,7 +11,7 @@ namespace Azure.Storage.Tables.Models
     public partial class StorageServiceStats
     {
         /// <summary> Initializes a new instance of StorageServiceStats. </summary>
-        internal StorageServiceStats()
+        public StorageServiceStats()
         {
         }
 

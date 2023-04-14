@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class LastPatchInstallationSummary
     {
         /// <summary> Initializes a new instance of LastPatchInstallationSummary. </summary>
-        internal LastPatchInstallationSummary()
+        public LastPatchInstallationSummary()
         {
         }
 

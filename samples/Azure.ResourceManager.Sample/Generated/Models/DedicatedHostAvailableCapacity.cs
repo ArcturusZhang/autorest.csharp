@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     internal partial class DedicatedHostAvailableCapacity
     {
         /// <summary> Initializes a new instance of DedicatedHostAvailableCapacity. </summary>
-        internal DedicatedHostAvailableCapacity()
+        public DedicatedHostAvailableCapacity()
         {
             AllocatableVMs = new ChangeTrackingList<DedicatedHostAllocatableVM>();
         }

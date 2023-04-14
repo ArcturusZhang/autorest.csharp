@@ -14,7 +14,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties
     {
         /// <summary> Initializes a new instance of NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties. </summary>
-        internal NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties()
+        public NetworkInterfaceIPConfigurationPrivateLinkConnectionProperties()
         {
             Fqdns = new ChangeTrackingList<string>();
         }

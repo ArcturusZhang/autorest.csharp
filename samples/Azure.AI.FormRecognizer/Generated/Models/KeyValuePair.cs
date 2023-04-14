@@ -18,7 +18,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="value"> Information about the extracted value in a key-value pair. </param>
         /// <param name="confidence"> Confidence value. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="key"/> or <paramref name="value"/> is null. </exception>
-        internal KeyValuePair(KeyValueElement key, KeyValueElement value, float confidence)
+        public KeyValuePair(KeyValueElement key, KeyValueElement value, float confidence)
         {
             Argument.AssertNotNull(key, nameof(key));
             Argument.AssertNotNull(value, nameof(value));

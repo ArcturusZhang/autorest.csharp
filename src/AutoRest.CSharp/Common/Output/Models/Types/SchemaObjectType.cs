@@ -156,11 +156,6 @@ namespace AutoRest.CSharp.Output.Models.Types
                 }
 
                 var propertyType = property.Declaration.Type;
-                if (property.SchemaProperty?.Schema is ConstantSchema constantSchema && property.IsRequired)
-                {
-                    // this corresponds to the InputLiteralType in DPG
-                    continue;
-                }
 
                 var validate = property.SchemaProperty?.Nullable != true && !propertyType.IsValueType ? ValidationType.AssertNotNull : ValidationType.None;
                 var parameter = new Parameter(
@@ -173,8 +168,8 @@ namespace AutoRest.CSharp.Output.Models.Types
 
                 // add all parameter into the serialization parameter list
                 serializationParameters.Add(parameter);
-                // only adds to public when it is required
-                if (IsStruct || property.SchemaProperty?.IsRequired == true)
+                // only adds to public when it is required but we do not add the discriminator
+                if ((IsStruct || property.IsRequired == true) && property.SchemaProperty?.Schema is not ConstantSchema && property != Discriminator?.Property)
                 {
                     // For structs all properties become required
                     publicParameters.Add(parameter);
@@ -192,11 +187,11 @@ namespace AutoRest.CSharp.Output.Models.Types
             GetConstructorParameters(parameters, out fullParameterList, out parametersToPassToBase, true, CreatePublicConstructorParameter);
 
             var summary = $"Initializes a new instance of {name}";
-            var accessibility = usage == SchemaTypeUsage.Output
-                ? MethodSignatureModifiers.Internal
-                : MethodSignatureModifiers.Public;
+            var accessibility = usage.HasFlag(SchemaTypeUsage.Input) || usage.HasFlag(SchemaTypeUsage.Model)
+                ? MethodSignatureModifiers.Public
+                : MethodSignatureModifiers.Internal;
 
-            if (Discriminator is not null)
+            if (ObjectSchema.Discriminator is not null)
                 accessibility = MethodSignatureModifiers.Protected;
 
             FormattableString[] baseInitializers = GetInitializersFromParameters(parametersToPassToBase);
@@ -219,7 +214,22 @@ namespace AutoRest.CSharp.Output.Models.Types
             {
                 var ctor = isInitializer ? parent.InitializationConstructor : parent.SerializationConstructor;
                 parametersToPassToBase = ctor.Signature.Parameters;
-                fullParameterList.AddRange(this == Discriminator?.DefaultObjectType ? parametersToPassToBase : parametersToPassToBase.Where(p => p.Name != Discriminator?.SerializedName));
+                // we add all the parameters to the base ctor invocation when it does not have a discriminator or is the unknown class with a discriminator
+                if (ObjectSchema.IsUnknownDiscriminatorModel || Discriminator is null)
+                {
+                    fullParameterList.AddRange(parametersToPassToBase);
+                }
+                else
+                {
+                    // we it has a discriminator and this class is not the unknown one, we exclude the discriminator parameter into the base invocation because we will do this:
+                    // internal Salmon(/* properties on salmon other than discriminator */) : base("salmon")
+                    foreach (var parameter in ctor.Signature.Parameters)
+                    {
+                        var property = ctor.FindPropertyInitializedByParameter(parameter);
+                        if (property != Discriminator.Property)
+                            fullParameterList.Add(parameter);
+                    }
+                }
             }
             fullParameterList.AddRange(parameters.Select(creator));
         }
@@ -251,13 +261,12 @@ namespace AutoRest.CSharp.Output.Models.Types
         private FormattableString[] GetInitializersFromParameters(IEnumerable<Parameter> parametersToPassToBase)
         {
             var baseInitializers = ConstructorInitializer.ParametersToFormattableString(parametersToPassToBase).ToArray();
-            if (Discriminator?.Value is not null && this != Discriminator?.DefaultObjectType)
+            if (Discriminator is not null && Discriminator.Value is { } discriminatorValue && !ObjectSchema.IsUnknownDiscriminatorModel)
             {
-                //FormattableString discriminatorInitializer = Discriminator!.Value.Value.Type.Equals(typeof(string)) ? (FormattableString)$"\"{Discriminator.Value.Value.Value}\"" : (FormattableString)$"{Discriminator.Value.Value.Value}";
-                FormattableString discriminatorInitializer = Discriminator!.Value.Value.GetConstantFormattable();
+                FormattableString discriminatorInitializer = discriminatorValue.GetConstantFormattable();
                 for (int i = 0; i < baseInitializers.Length; i++)
                 {
-                    if (baseInitializers[i].ToString() == Discriminator.SerializedName)
+                    if (baseInitializers[i].ToString() == Discriminator.Property.Declaration.Name.ToVariableName())
                         baseInitializers[i] = discriminatorInitializer;
                 }
             }
@@ -283,7 +292,7 @@ namespace AutoRest.CSharp.Output.Models.Types
         {
             List<ObjectPropertyInitializer> defaultCtorInitializers = new List<ObjectPropertyInitializer>();
 
-            if (includeDiscriminator && Discriminator is not null && Discriminator.Value is { } discriminatorValue) // TODO -- check if is unknown
+            if (includeDiscriminator && Discriminator is not null && Discriminator.Value is { } discriminatorValue && !ObjectSchema.IsUnknownDiscriminatorModel)
             {
                 defaultCtorInitializers.Add(new ObjectPropertyInitializer(Discriminator.Property, discriminatorValue));
             }
@@ -297,8 +306,9 @@ namespace AutoRest.CSharp.Output.Models.Types
                 ReferenceOrConstant? initializationValue = null;
                 Constant? defaultInitializationValue = null;
 
+                var variableName = property.Declaration.Name.ToVariableName();
                 var propertyType = property.Declaration.Type;
-                if (parameterMap.TryGetValue(property.Declaration.Name.FirstCharToLowerCase(), out var parameter) || IsStruct)
+                if (parameterMap.TryGetValue(variableName, out var parameter) || IsStruct)
                 {
                     // For structs all properties become required
                     Constant? defaultParameterValue = null;
@@ -317,7 +327,7 @@ namespace AutoRest.CSharp.Output.Models.Types
 
                     var validate = property.SchemaProperty?.Nullable != true && !inputType.IsValueType ? ValidationType.AssertNotNull : ValidationType.None;
                     var defaultCtorParameter = new Parameter(
-                        property.Declaration.Name.ToVariableName(),
+                        variableName,
                         property.ParameterDescription,
                         inputType,
                         defaultParameterValue,

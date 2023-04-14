@@ -11,7 +11,7 @@ namespace Azure.Management.Storage.Models
     public partial class LeaseShareResponse
     {
         /// <summary> Initializes a new instance of LeaseShareResponse. </summary>
-        internal LeaseShareResponse()
+        public LeaseShareResponse()
         {
         }
 

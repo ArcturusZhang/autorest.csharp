@@ -14,7 +14,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class EffectiveNetworkSecurityGroupListResult
     {
         /// <summary> Initializes a new instance of EffectiveNetworkSecurityGroupListResult. </summary>
-        internal EffectiveNetworkSecurityGroupListResult()
+        public EffectiveNetworkSecurityGroupListResult()
         {
             Value = new ChangeTrackingList<EffectiveNetworkSecurityGroup>();
         }

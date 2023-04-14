@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="status"> Operation status. </param>
         /// <param name="createdDateTime"> Date and time (UTC) when the copy operation was submitted. </param>
         /// <param name="lastUpdatedDateTime"> Date and time (UTC) when the status was last updated. </param>
-        internal CopyOperationResult(OperationStatus status, DateTimeOffset createdDateTime, DateTimeOffset lastUpdatedDateTime)
+        public CopyOperationResult(OperationStatus status, DateTimeOffset createdDateTime, DateTimeOffset lastUpdatedDateTime)
         {
             Status = status;
             CreatedDateTime = createdDateTime;

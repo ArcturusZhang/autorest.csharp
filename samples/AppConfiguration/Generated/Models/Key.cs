@@ -11,7 +11,7 @@ namespace AppConfiguration.Models
     public partial class Key
     {
         /// <summary> Initializes a new instance of Key. </summary>
-        internal Key()
+        public Key()
         {
         }
 

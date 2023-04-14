@@ -22,7 +22,6 @@ namespace body_complex.Models
         /// </param>
         internal UnknownFish(string fishtype, string species, float length, IList<Fish> siblings) : base(fishtype, species, length, siblings)
         {
-            Fishtype = fishtype ?? "Unknown";
         }
     }
 }

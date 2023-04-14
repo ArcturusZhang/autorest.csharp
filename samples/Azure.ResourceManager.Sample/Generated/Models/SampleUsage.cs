@@ -30,11 +30,10 @@ namespace Azure.ResourceManager.Sample.Models
         /// Serialized Name: SampleUsage.name
         /// </param>
         /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
-        internal SampleUsage(int currentValue, long limit, SampleUsageName name)
+        public SampleUsage(int currentValue, long limit, SampleUsageName name)
         {
             Argument.AssertNotNull(name, nameof(name));
 
-            Unit = UsageUnit.Count;
             CurrentValue = currentValue;
             Limit = limit;
             Name = name;

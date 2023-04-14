@@ -18,7 +18,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineSoftwarePatchProperties
     {
         /// <summary> Initializes a new instance of VirtualMachineSoftwarePatchProperties. </summary>
-        internal VirtualMachineSoftwarePatchProperties()
+        public VirtualMachineSoftwarePatchProperties()
         {
             Classifications = new ChangeTrackingList<string>();
         }

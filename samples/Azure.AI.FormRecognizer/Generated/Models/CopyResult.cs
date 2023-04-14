@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
     {
         /// <summary> Initializes a new instance of CopyResult. </summary>
         /// <param name="modelId"> Identifier of the target model. </param>
-        internal CopyResult(Guid modelId)
+        public CopyResult(Guid modelId)
         {
             ModelId = modelId;
             Errors = new ChangeTrackingList<ErrorInformation>();

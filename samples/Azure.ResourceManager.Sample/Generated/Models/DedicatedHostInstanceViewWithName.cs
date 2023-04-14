@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class DedicatedHostInstanceViewWithName : DedicatedHostInstanceView
     {
         /// <summary> Initializes a new instance of DedicatedHostInstanceViewWithName. </summary>
-        internal DedicatedHostInstanceViewWithName()
+        public DedicatedHostInstanceViewWithName()
         {
         }
 

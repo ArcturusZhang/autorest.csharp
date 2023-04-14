@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class ApiError
     {
         /// <summary> Initializes a new instance of ApiError. </summary>
-        internal ApiError()
+        public ApiError()
         {
             Details = new ChangeTrackingList<ApiErrorBase>();
         }

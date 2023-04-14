@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class AvailablePatchSummary
     {
         /// <summary> Initializes a new instance of AvailablePatchSummary. </summary>
-        internal AvailablePatchSummary()
+        public AvailablePatchSummary()
         {
         }
 

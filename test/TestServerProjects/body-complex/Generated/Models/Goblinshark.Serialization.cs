@@ -134,7 +134,7 @@ namespace body_complex.Models
                     continue;
                 }
             }
-            return new Goblinshark(fishtype, species.Value, length, Optional.ToList(siblings), Optional.ToNullable(age), birthday, Optional.ToNullable(jawsize), Optional.ToNullable(color));
+            return new Goblinshark(species.Value, length, Optional.ToList(siblings), Optional.ToNullable(age), birthday, Optional.ToNullable(jawsize), Optional.ToNullable(color));
         }
     }
 }

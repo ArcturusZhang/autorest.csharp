@@ -113,7 +113,7 @@ namespace body_complex.Models
                     continue;
                 }
             }
-            return new Salmon(fishtype, species.Value, length, Optional.ToList(siblings), location.Value, Optional.ToNullable(iswild));
+            return new Salmon(species.Value, length, Optional.ToList(siblings), location.Value, Optional.ToNullable(iswild));
         }
     }
 }

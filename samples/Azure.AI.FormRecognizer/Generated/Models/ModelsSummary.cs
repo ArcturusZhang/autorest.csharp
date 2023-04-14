@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="count"> Current count of trained custom models. </param>
         /// <param name="limit"> Max number of models that can be trained for this account. </param>
         /// <param name="lastUpdatedDateTime"> Date and time (UTC) when the summary was last updated. </param>
-        internal ModelsSummary(int count, int limit, DateTimeOffset lastUpdatedDateTime)
+        public ModelsSummary(int count, int limit, DateTimeOffset lastUpdatedDateTime)
         {
             Count = count;
             Limit = limit;

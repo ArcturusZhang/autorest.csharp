@@ -14,7 +14,7 @@ namespace body_complex.Models
     public partial class DotFishMarket
     {
         /// <summary> Initializes a new instance of DotFishMarket. </summary>
-        internal DotFishMarket()
+        public DotFishMarket()
         {
             Salmons = new ChangeTrackingList<DotSalmon>();
             Fishes = new ChangeTrackingList<DotFish>();

@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class RollbackStatusInfo
     {
         /// <summary> Initializes a new instance of RollbackStatusInfo. </summary>
-        internal RollbackStatusInfo()
+        public RollbackStatusInfo()
         {
         }
 

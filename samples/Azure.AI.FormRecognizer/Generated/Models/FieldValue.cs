@@ -16,7 +16,7 @@ namespace Azure.AI.FormRecognizer.Models
     {
         /// <summary> Initializes a new instance of FieldValue. </summary>
         /// <param name="type"> Type of field value. </param>
-        internal FieldValue(FieldValueType type)
+        public FieldValue(FieldValueType type)
         {
             Type = type;
             ValueArray = new ChangeTrackingList<FieldValue>();

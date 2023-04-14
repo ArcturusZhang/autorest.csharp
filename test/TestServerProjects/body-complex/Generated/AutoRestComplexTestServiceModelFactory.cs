@@ -49,7 +49,7 @@ namespace body_complex.Models
         /// <returns> A new <see cref="Models.DotSalmon"/> instance for mocking. </returns>
         public static DotSalmon DotSalmon(string species = null, string location = null, bool? iswild = null)
         {
-            return new DotSalmon("DotSalmon", species, location, iswild);
+            return new DotSalmon(species, location, iswild);
         }
 
         /// <summary> Initializes a new instance of ReadonlyObj. </summary>
@@ -78,7 +78,7 @@ namespace body_complex.Models
         /// <returns> A new <see cref="Models.MyDerivedType"/> instance for mocking. </returns>
         public static MyDerivedType MyDerivedType(string propB1 = null, string propBH1 = null, string propD1 = null)
         {
-            return new MyDerivedType(MyKind.Kind1, propB1, propBH1, propD1);
+            return new MyDerivedType(propB1, propBH1, propD1);
         }
     }
 }

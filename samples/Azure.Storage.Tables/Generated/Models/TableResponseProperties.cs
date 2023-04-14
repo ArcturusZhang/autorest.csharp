@@ -11,7 +11,7 @@ namespace Azure.Storage.Tables.Models
     public partial class TableResponseProperties
     {
         /// <summary> Initializes a new instance of TableResponseProperties. </summary>
-        internal TableResponseProperties()
+        public TableResponseProperties()
         {
         }
 

@@ -14,7 +14,7 @@ namespace Azure.Management.Storage.Models
     public partial class LegalHoldProperties
     {
         /// <summary> Initializes a new instance of LegalHoldProperties. </summary>
-        internal LegalHoldProperties()
+        public LegalHoldProperties()
         {
             Tags = new ChangeTrackingList<TagProperty>();
         }

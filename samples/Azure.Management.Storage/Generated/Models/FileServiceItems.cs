@@ -15,7 +15,7 @@ namespace Azure.Management.Storage.Models
     internal partial class FileServiceItems
     {
         /// <summary> Initializes a new instance of FileServiceItems. </summary>
-        internal FileServiceItems()
+        public FileServiceItems()
         {
             Value = new ChangeTrackingList<FileServiceData>();
         }

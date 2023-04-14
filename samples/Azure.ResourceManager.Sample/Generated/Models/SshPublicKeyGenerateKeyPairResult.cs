@@ -30,7 +30,7 @@ namespace Azure.ResourceManager.Sample.Models
         /// Serialized Name: SshPublicKeyGenerateKeyPairResult.id
         /// </param>
         /// <exception cref="ArgumentNullException"> <paramref name="privateKey"/>, <paramref name="publicKey"/> or <paramref name="id"/> is null. </exception>
-        internal SshPublicKeyGenerateKeyPairResult(string privateKey, string publicKey, string id)
+        public SshPublicKeyGenerateKeyPairResult(string privateKey, string publicKey, string id)
         {
             Argument.AssertNotNull(privateKey, nameof(privateKey));
             Argument.AssertNotNull(publicKey, nameof(publicKey));

@@ -119,7 +119,7 @@ namespace body_complex.Models
                     continue;
                 }
             }
-            return new Sawshark(fishtype, species.Value, length, Optional.ToList(siblings), Optional.ToNullable(age), birthday, picture.Value);
+            return new Sawshark(species.Value, length, Optional.ToList(siblings), Optional.ToNullable(age), birthday, picture.Value);
         }
     }
 }

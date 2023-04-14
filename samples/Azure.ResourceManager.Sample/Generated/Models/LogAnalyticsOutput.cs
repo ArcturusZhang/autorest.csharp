@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     internal partial class LogAnalyticsOutput
     {
         /// <summary> Initializes a new instance of LogAnalyticsOutput. </summary>
-        internal LogAnalyticsOutput()
+        public LogAnalyticsOutput()
         {
         }
 

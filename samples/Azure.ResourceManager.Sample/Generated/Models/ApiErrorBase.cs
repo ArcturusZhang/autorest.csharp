@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class ApiErrorBase
     {
         /// <summary> Initializes a new instance of ApiErrorBase. </summary>
-        internal ApiErrorBase()
+        public ApiErrorBase()
         {
         }
 

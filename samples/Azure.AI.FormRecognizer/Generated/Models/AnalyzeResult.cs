@@ -19,7 +19,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="version"> Version of schema used for this result. </param>
         /// <param name="readResults"> Text extracted from the input. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="version"/> or <paramref name="readResults"/> is null. </exception>
-        internal AnalyzeResult(string version, IEnumerable<ReadResult> readResults)
+        public AnalyzeResult(string version, IEnumerable<ReadResult> readResults)
         {
             Argument.AssertNotNull(version, nameof(version));
             Argument.AssertNotNull(readResults, nameof(readResults));

@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="boundingBox"> Bounding box of an extracted line. </param>
         /// <param name="words"> List of words in the text line. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="text"/>, <paramref name="boundingBox"/> or <paramref name="words"/> is null. </exception>
-        internal TextLine(string text, IEnumerable<float> boundingBox, IEnumerable<TextWord> words)
+        public TextLine(string text, IEnumerable<float> boundingBox, IEnumerable<TextWord> words)
         {
             Argument.AssertNotNull(text, nameof(text));
             Argument.AssertNotNull(boundingBox, nameof(boundingBox));

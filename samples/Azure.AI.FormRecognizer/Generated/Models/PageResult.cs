@@ -15,7 +15,7 @@ namespace Azure.AI.FormRecognizer.Models
     {
         /// <summary> Initializes a new instance of PageResult. </summary>
         /// <param name="page"> Page number. </param>
-        internal PageResult(int page)
+        public PageResult(int page)
         {
             Page = page;
             KeyValuePairs = new ChangeTrackingList<KeyValuePair>();

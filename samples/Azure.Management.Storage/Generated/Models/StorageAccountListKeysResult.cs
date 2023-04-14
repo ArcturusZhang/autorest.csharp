@@ -14,7 +14,7 @@ namespace Azure.Management.Storage.Models
     public partial class StorageAccountListKeysResult
     {
         /// <summary> Initializes a new instance of StorageAccountListKeysResult. </summary>
-        internal StorageAccountListKeysResult()
+        public StorageAccountListKeysResult()
         {
             Keys = new ChangeTrackingList<StorageAccountKey>();
         }

@@ -15,7 +15,7 @@ namespace AdditionalPropertiesEx.Models
     {
         /// <summary> Initializes a new instance of OutputAdditionalPropertiesModel. </summary>
         /// <param name="id"></param>
-        internal OutputAdditionalPropertiesModel(int id)
+        public OutputAdditionalPropertiesModel(int id)
         {
             Id = id;
             AdditionalProperties = new ChangeTrackingDictionary<string, string>();

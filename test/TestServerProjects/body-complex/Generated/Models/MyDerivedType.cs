@@ -11,20 +11,18 @@ namespace body_complex.Models
     public partial class MyDerivedType : MyBaseType
     {
         /// <summary> Initializes a new instance of MyDerivedType. </summary>
-        internal MyDerivedType()
+        public MyDerivedType()
         {
             Kind = MyKind.Kind1;
         }
 
         /// <summary> Initializes a new instance of MyDerivedType. </summary>
-        /// <param name="kind"></param>
         /// <param name="propB1"></param>
         /// <param name="propBH1"></param>
         /// <param name="propD1"></param>
-        internal MyDerivedType(MyKind kind, string propB1, string propBH1, string propD1) : base(kind, propB1, propBH1)
+        internal MyDerivedType(string propB1, string propBH1, string propD1) : base(MyKind.Kind1, propB1, propBH1)
         {
             PropD1 = propD1;
-            Kind = kind;
         }
 
         /// <summary> Gets the prop d 1. </summary>

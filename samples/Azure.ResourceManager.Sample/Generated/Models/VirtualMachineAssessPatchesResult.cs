@@ -18,7 +18,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineAssessPatchesResult
     {
         /// <summary> Initializes a new instance of VirtualMachineAssessPatchesResult. </summary>
-        internal VirtualMachineAssessPatchesResult()
+        public VirtualMachineAssessPatchesResult()
         {
             Patches = new ChangeTrackingList<VirtualMachineSoftwarePatchProperties>();
         }

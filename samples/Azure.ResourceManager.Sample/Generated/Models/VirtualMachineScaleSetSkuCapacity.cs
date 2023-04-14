@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineScaleSetSkuCapacity
     {
         /// <summary> Initializes a new instance of VirtualMachineScaleSetSkuCapacity. </summary>
-        internal VirtualMachineScaleSetSkuCapacity()
+        public VirtualMachineScaleSetSkuCapacity()
         {
         }
 

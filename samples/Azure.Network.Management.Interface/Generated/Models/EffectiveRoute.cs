@@ -14,7 +14,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class EffectiveRoute
     {
         /// <summary> Initializes a new instance of EffectiveRoute. </summary>
-        internal EffectiveRoute()
+        public EffectiveRoute()
         {
             AddressPrefix = new ChangeTrackingList<string>();
             NextHopIpAddress = new ChangeTrackingList<string>();

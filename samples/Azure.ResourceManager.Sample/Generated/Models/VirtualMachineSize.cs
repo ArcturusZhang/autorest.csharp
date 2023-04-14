@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineSize
     {
         /// <summary> Initializes a new instance of VirtualMachineSize. </summary>
-        internal VirtualMachineSize()
+        public VirtualMachineSize()
         {
         }
 

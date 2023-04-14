@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class VirtualMachineAgentInstanceView
     {
         /// <summary> Initializes a new instance of VirtualMachineAgentInstanceView. </summary>
-        internal VirtualMachineAgentInstanceView()
+        public VirtualMachineAgentInstanceView()
         {
             ExtensionHandlers = new ChangeTrackingList<VirtualMachineExtensionHandlerInstanceView>();
             Statuses = new ChangeTrackingList<InstanceViewStatus>();

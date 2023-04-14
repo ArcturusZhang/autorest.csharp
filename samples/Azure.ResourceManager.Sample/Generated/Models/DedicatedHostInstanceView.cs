@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class DedicatedHostInstanceView
     {
         /// <summary> Initializes a new instance of DedicatedHostInstanceView. </summary>
-        internal DedicatedHostInstanceView()
+        public DedicatedHostInstanceView()
         {
             Statuses = new ChangeTrackingList<InstanceViewStatus>();
         }

@@ -14,7 +14,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class EffectiveNetworkSecurityGroup
     {
         /// <summary> Initializes a new instance of EffectiveNetworkSecurityGroup. </summary>
-        internal EffectiveNetworkSecurityGroup()
+        public EffectiveNetworkSecurityGroup()
         {
             EffectiveSecurityRules = new ChangeTrackingList<EffectiveNetworkSecurityRule>();
         }

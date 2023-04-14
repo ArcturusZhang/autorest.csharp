@@ -15,6 +15,15 @@ namespace azure_parameter_grouping.Models
         {
         }
 
+        /// <summary> Initializes a new instance of ParameterGroupingPostReservedWordsParameters. </summary>
+        /// <param name="from"> &apos;from&apos; is a reserved word. Pass in &apos;bob&apos; to pass. </param>
+        /// <param name="accept"> &apos;accept&apos; is a reserved word. Pass in &apos;yes&apos; to pass. </param>
+        internal ParameterGroupingPostReservedWordsParameters(string @from, string accept)
+        {
+            From = @from;
+            Accept = accept;
+        }
+
         /// <summary> &apos;from&apos; is a reserved word. Pass in &apos;bob&apos; to pass. </summary>
         public string From { get; set; }
         /// <summary> &apos;accept&apos; is a reserved word. Pass in &apos;yes&apos; to pass. </summary>

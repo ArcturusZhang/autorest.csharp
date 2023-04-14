@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class RecoveryWalkResponse
     {
         /// <summary> Initializes a new instance of RecoveryWalkResponse. </summary>
-        internal RecoveryWalkResponse()
+        public RecoveryWalkResponse()
         {
         }
 

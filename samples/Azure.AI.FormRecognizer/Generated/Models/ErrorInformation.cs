@@ -17,7 +17,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="code"></param>
         /// <param name="message"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="message"/> is null. </exception>
-        internal ErrorInformation(string code, string message)
+        public ErrorInformation(string code, string message)
         {
             Argument.AssertNotNull(code, nameof(code));
             Argument.AssertNotNull(message, nameof(message));

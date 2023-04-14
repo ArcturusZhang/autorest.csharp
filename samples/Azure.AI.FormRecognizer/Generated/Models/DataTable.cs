@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="columns"> Number of columns. </param>
         /// <param name="cells"> List of cells contained in the table. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="cells"/> is null. </exception>
-        internal DataTable(int rows, int columns, IEnumerable<DataTableCell> cells)
+        public DataTable(int rows, int columns, IEnumerable<DataTableCell> cells)
         {
             Argument.AssertNotNull(cells, nameof(cells));
 

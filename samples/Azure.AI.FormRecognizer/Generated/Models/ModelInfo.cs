@@ -17,7 +17,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="status"> Status of the model. </param>
         /// <param name="createdDateTime"> Date and time (UTC) when the model was created. </param>
         /// <param name="lastUpdatedDateTime"> Date and time (UTC) when the status was last updated. </param>
-        internal ModelInfo(Guid modelId, ModelStatus status, DateTimeOffset createdDateTime, DateTimeOffset lastUpdatedDateTime)
+        public ModelInfo(Guid modelId, ModelStatus status, DateTimeOffset createdDateTime, DateTimeOffset lastUpdatedDateTime)
         {
             ModelId = modelId;
             Status = status;

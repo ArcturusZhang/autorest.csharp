@@ -14,7 +14,7 @@ namespace Azure.Storage.Tables.Models
     public partial class TableEntityQueryResponse
     {
         /// <summary> Initializes a new instance of TableEntityQueryResponse. </summary>
-        internal TableEntityQueryResponse()
+        public TableEntityQueryResponse()
         {
             Value = new ChangeTrackingList<IDictionary<string, object>>();
         }

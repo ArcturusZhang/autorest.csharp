@@ -15,7 +15,7 @@ namespace Azure.Management.Storage.Models
     {
         /// <summary> Initializes a new instance of StorageSkuInformation. </summary>
         /// <param name="name"> The SKU name. Required for account creation; optional for update. Note that in older versions, SKU name was called accountType. </param>
-        internal StorageSkuInformation(StorageSkuName name)
+        public StorageSkuInformation(StorageSkuName name)
         {
             Name = name;
             Locations = new ChangeTrackingList<string>();

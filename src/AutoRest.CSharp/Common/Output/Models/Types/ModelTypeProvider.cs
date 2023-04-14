@@ -216,9 +216,9 @@ namespace AutoRest.CSharp.Output.Models.Types
             GetConstructorParameters(parameters, out fullParameterList, out parametersToPassToBase, true, CreatePublicConstructorParameter);
 
             var summary = $"Initializes a new instance of {name}";
-            var accessibility = usage == InputModelTypeUsage.Output
-                ? MethodSignatureModifiers.Internal
-                : MethodSignatureModifiers.Public;
+            var accessibility = usage.HasFlag(InputModelTypeUsage.Input)
+                ? MethodSignatureModifiers.Public
+                : MethodSignatureModifiers.Internal;
 
             if (_inputModel.DiscriminatorPropertyName is not null)
                 accessibility = MethodSignatureModifiers.Protected;

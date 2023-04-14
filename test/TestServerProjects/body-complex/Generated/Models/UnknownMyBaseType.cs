@@ -16,7 +16,6 @@ namespace body_complex.Models
         /// <param name="propBH1"></param>
         internal UnknownMyBaseType(MyKind kind, string propB1, string propBH1) : base(kind, propB1, propBH1)
         {
-            Kind = kind;
         }
     }
 }

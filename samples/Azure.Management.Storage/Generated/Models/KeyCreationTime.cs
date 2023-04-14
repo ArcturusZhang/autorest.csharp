@@ -13,7 +13,7 @@ namespace Azure.Management.Storage.Models
     public partial class KeyCreationTime
     {
         /// <summary> Initializes a new instance of KeyCreationTime. </summary>
-        internal KeyCreationTime()
+        public KeyCreationTime()
         {
         }
 

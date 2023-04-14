@@ -20,7 +20,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// <param name="pageRange"> First and last page number where the document is found. </param>
         /// <param name="fields"> Dictionary of named field values. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="docType"/>, <paramref name="pageRange"/> or <paramref name="fields"/> is null. </exception>
-        internal DocumentResult(string docType, IEnumerable<int> pageRange, IReadOnlyDictionary<string, FieldValue> fields)
+        public DocumentResult(string docType, IEnumerable<int> pageRange, IReadOnlyDictionary<string, FieldValue> fields)
         {
             Argument.AssertNotNull(docType, nameof(docType));
             Argument.AssertNotNull(pageRange, nameof(pageRange));

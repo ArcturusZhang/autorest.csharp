@@ -13,7 +13,6 @@ namespace azure_special_properties.Models
         /// <summary> Initializes a new instance of Error. </summary>
         internal Error()
         {
-            ConstantId = ErrorConstantId._1;
         }
 
         /// <summary> Initializes a new instance of Error. </summary>

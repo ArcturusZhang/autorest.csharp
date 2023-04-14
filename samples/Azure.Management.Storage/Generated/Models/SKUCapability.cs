@@ -11,7 +11,7 @@ namespace Azure.Management.Storage.Models
     public partial class SKUCapability
     {
         /// <summary> Initializes a new instance of SKUCapability. </summary>
-        internal SKUCapability()
+        public SKUCapability()
         {
         }
 

@@ -21,7 +21,15 @@ namespace Azure.Management.Storage.Models
             Argument.AssertNotNull(name, nameof(name));
 
             Name = name;
-            ResourceType = Type.MicrosoftStorageStorageAccounts;
+        }
+
+        /// <summary> Initializes a new instance of StorageAccountCheckNameAvailabilityContent. </summary>
+        /// <param name="name"> The storage account name. </param>
+        /// <param name="resourceType"> The type of resource, Microsoft.Storage/storageAccounts. </param>
+        internal StorageAccountCheckNameAvailabilityContent(string name, Type resourceType)
+        {
+            Name = name;
+            ResourceType = resourceType;
         }
 
         /// <summary> The storage account name. </summary>

@@ -324,39 +324,6 @@ namespace Azure.ResourceManager.Sample.Models
             return new SshPublicKeyData(id, name, resourceType, systemData, tags, location, publicKey);
         }
 
-        /// <summary> Initializes a new instance of SshPublicKeyGenerateKeyPairResult. </summary>
-        /// <param name="privateKey">
-        /// Private key portion of the key pair used to authenticate to a virtual machine through ssh. The private key is returned in RFC3447 format and should be treated as a secret.
-        /// Serialized Name: SshPublicKeyGenerateKeyPairResult.privateKey
-        /// </param>
-        /// <param name="publicKey">
-        /// Public key portion of the key pair used to authenticate to a virtual machine through ssh. The public key is in ssh-rsa format.
-        /// Serialized Name: SshPublicKeyGenerateKeyPairResult.publicKey
-        /// </param>
-        /// <param name="id">
-        /// The ARM resource id in the form of /subscriptions/{SubscriptionId}/resourceGroups/{ResourceGroupName}/providers/Microsoft.Compute/sshPublicKeys/{SshPublicKeyName}
-        /// Serialized Name: SshPublicKeyGenerateKeyPairResult.id
-        /// </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="privateKey"/>, <paramref name="publicKey"/> or <paramref name="id"/> is null. </exception>
-        /// <returns> A new <see cref="Models.SshPublicKeyGenerateKeyPairResult"/> instance for mocking. </returns>
-        public static SshPublicKeyGenerateKeyPairResult SshPublicKeyGenerateKeyPairResult(string privateKey = null, string publicKey = null, string id = null)
-        {
-            if (privateKey == null)
-            {
-                throw new ArgumentNullException(nameof(privateKey));
-            }
-            if (publicKey == null)
-            {
-                throw new ArgumentNullException(nameof(publicKey));
-            }
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            return new SshPublicKeyGenerateKeyPairResult(privateKey, publicKey, id);
-        }
-
         /// <summary> Initializes a new instance of VirtualMachineExtensionImageData. </summary>
         /// <param name="id"> The id. </param>
         /// <param name="name"> The name. </param>

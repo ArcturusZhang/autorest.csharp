@@ -13,7 +13,7 @@ namespace Azure.Management.Storage.Models
     public partial class StorageAccountKey
     {
         /// <summary> Initializes a new instance of StorageAccountKey. </summary>
-        internal StorageAccountKey()
+        public StorageAccountKey()
         {
         }
 

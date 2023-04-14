@@ -14,25 +14,6 @@ namespace Azure.AI.FormRecognizer.Models
     /// <summary> Model factory for models. </summary>
     public static partial class AzureAIFormRecognizerModelFactory
     {
-        /// <summary> Initializes a new instance of ErrorInformation. </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="message"/> is null. </exception>
-        /// <returns> A new <see cref="FormRecognizer.Models.ErrorInformation"/> instance for mocking. </returns>
-        public static ErrorInformation ErrorInformation(string code = null, string message = null)
-        {
-            if (code == null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            return new ErrorInformation(code, message);
-        }
-
         /// <summary> Initializes a new instance of Model. </summary>
         /// <param name="modelInfo"> Basic custom model information. </param>
         /// <param name="keys"> Keys extracted by the custom model. </param>
@@ -41,28 +22,6 @@ namespace Azure.AI.FormRecognizer.Models
         public static Model Model(ModelInfo modelInfo = null, KeysResult keys = null, TrainResult trainResult = null)
         {
             return new Model(modelInfo, keys, trainResult);
-        }
-
-        /// <summary> Initializes a new instance of ModelInfo. </summary>
-        /// <param name="modelId"> Model identifier. </param>
-        /// <param name="status"> Status of the model. </param>
-        /// <param name="createdDateTime"> Date and time (UTC) when the model was created. </param>
-        /// <param name="lastUpdatedDateTime"> Date and time (UTC) when the status was last updated. </param>
-        /// <returns> A new <see cref="FormRecognizer.Models.ModelInfo"/> instance for mocking. </returns>
-        public static ModelInfo ModelInfo(Guid modelId = default, ModelStatus status = default, DateTimeOffset createdDateTime = default, DateTimeOffset lastUpdatedDateTime = default)
-        {
-            return new ModelInfo(modelId, status, createdDateTime, lastUpdatedDateTime);
-        }
-
-        /// <summary> Initializes a new instance of KeysResult. </summary>
-        /// <param name="clusters"> Object mapping clusterIds to a list of keys. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clusters"/> is null. </exception>
-        /// <returns> A new <see cref="FormRecognizer.Models.KeysResult"/> instance for mocking. </returns>
-        public static KeysResult KeysResult(IReadOnlyDictionary<string, IList<string>> clusters = null)
-        {
-            clusters ??= new Dictionary<string, IList<string>>();
-
-            return new KeysResult(clusters);
         }
 
         /// <summary> Initializes a new instance of TrainResult. </summary>
@@ -78,34 +37,6 @@ namespace Azure.AI.FormRecognizer.Models
             errors ??= new List<ErrorInformation>();
 
             return new TrainResult(trainingDocuments?.ToList(), fields?.ToList(), averageModelAccuracy, errors?.ToList());
-        }
-
-        /// <summary> Initializes a new instance of TrainingDocumentInfo. </summary>
-        /// <param name="documentName"> Training document name. </param>
-        /// <param name="pages"> Total number of pages trained. </param>
-        /// <param name="errors"> List of errors. </param>
-        /// <param name="status"> Status of the training operation. </param>
-        /// <returns> A new <see cref="FormRecognizer.Models.TrainingDocumentInfo"/> instance for mocking. </returns>
-        public static TrainingDocumentInfo TrainingDocumentInfo(string documentName = null, int pages = default, IEnumerable<ErrorInformation> errors = null, TrainStatus status = default)
-        {
-            errors ??= new List<ErrorInformation>();
-
-            return new TrainingDocumentInfo(documentName, pages, errors?.ToList(), status);
-        }
-
-        /// <summary> Initializes a new instance of FormFieldsReport. </summary>
-        /// <param name="fieldName"> Training field name. </param>
-        /// <param name="accuracy"> Estimated extraction accuracy for this field. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="fieldName"/> is null. </exception>
-        /// <returns> A new <see cref="FormRecognizer.Models.FormFieldsReport"/> instance for mocking. </returns>
-        public static FormFieldsReport FormFieldsReport(string fieldName = null, float accuracy = default)
-        {
-            if (fieldName == null)
-            {
-                throw new ArgumentNullException(nameof(fieldName));
-            }
-
-            return new FormFieldsReport(fieldName, accuracy);
         }
 
         /// <summary> Initializes a new instance of AnalyzeOperationResult. </summary>
@@ -216,18 +147,6 @@ namespace Azure.AI.FormRecognizer.Models
             return new KeyValueElement(text, boundingBox?.ToList(), elements?.ToList());
         }
 
-        /// <summary> Initializes a new instance of DataTable. </summary>
-        /// <param name="rows"> Number of rows. </param>
-        /// <param name="columns"> Number of columns. </param>
-        /// <param name="cells"> List of cells contained in the table. </param>
-        /// <returns> A new <see cref="FormRecognizer.Models.DataTable"/> instance for mocking. </returns>
-        public static DataTable DataTable(int rows = default, int columns = default, IEnumerable<DataTableCell> cells = null)
-        {
-            cells ??= new List<DataTableCell>();
-
-            return new DataTable(rows, columns, cells?.ToList());
-        }
-
         /// <summary> Initializes a new instance of DataTableCell. </summary>
         /// <param name="rowIndex"> Row index of the cell. </param>
         /// <param name="columnIndex"> Column index of the cell. </param>
@@ -246,19 +165,6 @@ namespace Azure.AI.FormRecognizer.Models
             elements ??= new List<string>();
 
             return new DataTableCell(rowIndex, columnIndex, rowSpan, columnSpan, text, boundingBox?.ToList(), confidence, elements?.ToList(), isHeader, isFooter);
-        }
-
-        /// <summary> Initializes a new instance of DocumentResult. </summary>
-        /// <param name="docType"> Document type. </param>
-        /// <param name="pageRange"> First and last page number where the document is found. </param>
-        /// <param name="fields"> Dictionary of named field values. </param>
-        /// <returns> A new <see cref="FormRecognizer.Models.DocumentResult"/> instance for mocking. </returns>
-        public static DocumentResult DocumentResult(string docType = null, IEnumerable<int> pageRange = null, IReadOnlyDictionary<string, FieldValue> fields = null)
-        {
-            pageRange ??= new List<int>();
-            fields ??= new Dictionary<string, FieldValue>();
-
-            return new DocumentResult(docType, pageRange?.ToList(), fields);
         }
 
         /// <summary> Initializes a new instance of FieldValue. </summary>
@@ -319,16 +225,6 @@ namespace Azure.AI.FormRecognizer.Models
             modelList ??= new List<ModelInfo>();
 
             return new Models(summary, modelList?.ToList(), nextLink);
-        }
-
-        /// <summary> Initializes a new instance of ModelsSummary. </summary>
-        /// <param name="count"> Current count of trained custom models. </param>
-        /// <param name="limit"> Max number of models that can be trained for this account. </param>
-        /// <param name="lastUpdatedDateTime"> Date and time (UTC) when the summary was last updated. </param>
-        /// <returns> A new <see cref="FormRecognizer.Models.ModelsSummary"/> instance for mocking. </returns>
-        public static ModelsSummary ModelsSummary(int count = default, int limit = default, DateTimeOffset lastUpdatedDateTime = default)
-        {
-            return new ModelsSummary(count, limit, lastUpdatedDateTime);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace body_complex.Models
                     continue;
                 }
             }
-            return new MyDerivedType(kind, propB1.Value, propBH1.Value, propD1.Value);
+            return new MyDerivedType(propB1.Value, propBH1.Value, propD1.Value);
         }
     }
 }

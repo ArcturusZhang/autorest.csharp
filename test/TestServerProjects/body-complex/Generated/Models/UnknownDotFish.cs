@@ -15,7 +15,6 @@ namespace body_complex.Models
         /// <param name="species"></param>
         internal UnknownDotFish(string fishType, string species) : base(fishType, species)
         {
-            FishType = fishType ?? "Unknown";
         }
     }
 }

@@ -104,7 +104,7 @@ namespace body_complex.Models
                     continue;
                 }
             }
-            return new Cookiecuttershark(fishtype, species.Value, length, Optional.ToList(siblings), Optional.ToNullable(age), birthday);
+            return new Cookiecuttershark(species.Value, length, Optional.ToList(siblings), Optional.ToNullable(age), birthday);
         }
     }
 }

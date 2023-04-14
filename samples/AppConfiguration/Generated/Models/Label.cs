@@ -11,7 +11,7 @@ namespace AppConfiguration.Models
     public partial class Label
     {
         /// <summary> Initializes a new instance of Label. </summary>
-        internal Label()
+        public Label()
         {
         }
 

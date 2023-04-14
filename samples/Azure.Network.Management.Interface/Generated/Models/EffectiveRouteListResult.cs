@@ -14,7 +14,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class EffectiveRouteListResult
     {
         /// <summary> Initializes a new instance of EffectiveRouteListResult. </summary>
-        internal EffectiveRouteListResult()
+        public EffectiveRouteListResult()
         {
             Value = new ChangeTrackingList<EffectiveRoute>();
         }

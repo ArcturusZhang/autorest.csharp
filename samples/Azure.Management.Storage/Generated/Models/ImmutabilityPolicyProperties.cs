@@ -15,7 +15,7 @@ namespace Azure.Management.Storage.Models
     public partial class ImmutabilityPolicyProperties
     {
         /// <summary> Initializes a new instance of ImmutabilityPolicyProperties. </summary>
-        internal ImmutabilityPolicyProperties()
+        public ImmutabilityPolicyProperties()
         {
             UpdateHistory = new ChangeTrackingList<UpdateHistoryProperty>();
         }

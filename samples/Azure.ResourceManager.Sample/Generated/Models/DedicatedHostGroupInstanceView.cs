@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Sample.Models
     internal partial class DedicatedHostGroupInstanceView
     {
         /// <summary> Initializes a new instance of DedicatedHostGroupInstanceView. </summary>
-        internal DedicatedHostGroupInstanceView()
+        public DedicatedHostGroupInstanceView()
         {
             Hosts = new ChangeTrackingList<DedicatedHostInstanceViewWithName>();
         }

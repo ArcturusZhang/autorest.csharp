@@ -11,7 +11,7 @@ namespace Azure.Management.Storage.Models
     public partial class StorageUsage
     {
         /// <summary> Initializes a new instance of StorageUsage. </summary>
-        internal StorageUsage()
+        public StorageUsage()
         {
         }
 

@@ -22,7 +22,6 @@ namespace body_complex.Models
         }
 
         /// <summary> Initializes a new instance of Goblinshark. </summary>
-        /// <param name="fishtype"></param>
         /// <param name="species"></param>
         /// <param name="length"></param>
         /// <param name="siblings">
@@ -33,11 +32,10 @@ namespace body_complex.Models
         /// <param name="birthday"></param>
         /// <param name="jawsize"></param>
         /// <param name="color"> Colors possible. </param>
-        internal Goblinshark(string fishtype, string species, float length, IList<Fish> siblings, int? age, DateTimeOffset birthday, int? jawsize, GoblinSharkColor? color) : base(fishtype, species, length, siblings, age, birthday)
+        internal Goblinshark(string species, float length, IList<Fish> siblings, int? age, DateTimeOffset birthday, int? jawsize, GoblinSharkColor? color) : base(species, length, siblings, age, birthday)
         {
             Jawsize = jawsize;
             Color = color;
-            Fishtype = fishtype ?? "goblin";
         }
 
         /// <summary> Gets or sets the jawsize. </summary>

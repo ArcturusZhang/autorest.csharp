@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class InnerError
     {
         /// <summary> Initializes a new instance of InnerError. </summary>
-        internal InnerError()
+        public InnerError()
         {
         }
 

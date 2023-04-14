@@ -14,7 +14,7 @@ namespace Azure.Management.Storage.Models
     public partial class Restriction
     {
         /// <summary> Initializes a new instance of Restriction. </summary>
-        internal Restriction()
+        public Restriction()
         {
             Values = new ChangeTrackingList<string>();
         }

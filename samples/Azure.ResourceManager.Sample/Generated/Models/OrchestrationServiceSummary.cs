@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class OrchestrationServiceSummary
     {
         /// <summary> Initializes a new instance of OrchestrationServiceSummary. </summary>
-        internal OrchestrationServiceSummary()
+        public OrchestrationServiceSummary()
         {
         }
 

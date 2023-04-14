@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Sample.Models
     internal partial class VirtualMachineHealthStatus
     {
         /// <summary> Initializes a new instance of VirtualMachineHealthStatus. </summary>
-        internal VirtualMachineHealthStatus()
+        public VirtualMachineHealthStatus()
         {
         }
 

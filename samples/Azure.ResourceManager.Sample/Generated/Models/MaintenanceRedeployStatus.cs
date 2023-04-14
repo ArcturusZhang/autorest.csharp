@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Sample.Models
     public partial class MaintenanceRedeployStatus
     {
         /// <summary> Initializes a new instance of MaintenanceRedeployStatus. </summary>
-        internal MaintenanceRedeployStatus()
+        public MaintenanceRedeployStatus()
         {
         }
 

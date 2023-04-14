@@ -11,7 +11,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class EffectiveNetworkSecurityGroupAssociation
     {
         /// <summary> Initializes a new instance of EffectiveNetworkSecurityGroupAssociation. </summary>
-        internal EffectiveNetworkSecurityGroupAssociation()
+        public EffectiveNetworkSecurityGroupAssociation()
         {
         }
 

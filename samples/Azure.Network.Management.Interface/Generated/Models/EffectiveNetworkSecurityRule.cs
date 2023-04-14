@@ -14,7 +14,7 @@ namespace Azure.Network.Management.Interface.Models
     public partial class EffectiveNetworkSecurityRule
     {
         /// <summary> Initializes a new instance of EffectiveNetworkSecurityRule. </summary>
-        internal EffectiveNetworkSecurityRule()
+        public EffectiveNetworkSecurityRule()
         {
             SourcePortRanges = new ChangeTrackingList<string>();
             DestinationPortRanges = new ChangeTrackingList<string>();
