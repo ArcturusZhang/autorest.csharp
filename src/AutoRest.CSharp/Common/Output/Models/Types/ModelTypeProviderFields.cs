@@ -18,7 +18,7 @@ using static AutoRest.CSharp.Output.Models.FieldModifiers;
 
 namespace AutoRest.CSharp.Output.Models.Types
 {
-    internal sealed class ModelTypeProviderFields : IReadOnlyCollection<FieldDeclaration>
+    internal sealed class ModelTypeProviderFields : IObjectTypeFields<InputModelProperty>
     {
         private readonly IReadOnlyList<FieldDeclaration> _fields;
         private readonly IReadOnlyDictionary<FieldDeclaration, InputModelProperty> _fieldsToInputs;
@@ -40,7 +40,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             string? discriminator = inputModel.DiscriminatorPropertyName;
             if (discriminator is not null)
             {
-                var originalFieldName = discriminator.FirstCharToUpperCase();
+                var originalFieldName = discriminator.ToCleanName();
                 var inputModelProperty = new InputModelProperty(discriminator, discriminator, "Discriminator", InputPrimitiveType.String, true, false, true);
                 var field = CreateField(originalFieldName, typeof(string), inputModel, inputModelProperty);
                 fields.Add(field);
@@ -107,7 +107,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             if (inputModelProperty.IsDiscriminator)
             {
                 fieldModifiers = Configuration.PublicDiscriminatorProperty ? Public : Internal;
-                setterModifiers = Configuration.PublicDiscriminatorProperty ? Internal | Protected : Protected;
+                setterModifiers = Configuration.PublicDiscriminatorProperty ? Internal | Protected : null;
             }
             else
             {
