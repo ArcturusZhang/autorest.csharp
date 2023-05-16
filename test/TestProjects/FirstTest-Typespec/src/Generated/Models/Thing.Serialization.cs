@@ -84,11 +84,11 @@ namespace TypeSpecFirstTest.Models
             string requiredUnion = default;
             string requiredLiteralString = default;
             int requiredLiteralInt = default;
-            double requiredLiteralDouble = default;
+            float requiredLiteralDouble = default;
             bool requiredLiteralBool = default;
             Optional<string> optionalLiteralString = default;
             Optional<int?> optionalLiteralInt = default;
-            Optional<double?> optionalLiteralDouble = default;
+            Optional<float?> optionalLiteralDouble = default;
             Optional<bool?> optionalLiteralBool = default;
             string requiredBadDescription = default;
             foreach (var property in element.EnumerateObject())
@@ -115,7 +115,7 @@ namespace TypeSpecFirstTest.Models
                 }
                 if (property.NameEquals("requiredLiteralDouble"u8))
                 {
-                    requiredLiteralDouble = property.Value.GetDouble();
+                    requiredLiteralDouble = property.Value.GetSingle();
                     continue;
                 }
                 if (property.NameEquals("requiredLiteralBool"u8))
@@ -145,7 +145,7 @@ namespace TypeSpecFirstTest.Models
                         optionalLiteralDouble = null;
                         continue;
                     }
-                    optionalLiteralDouble = property.Value.GetDouble();
+                    optionalLiteralDouble = property.Value.GetSingle();
                     continue;
                 }
                 if (property.NameEquals("optionalLiteralBool"u8))

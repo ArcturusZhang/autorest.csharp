@@ -41,7 +41,7 @@ namespace TypeSpecFirstTest.Models
         /// <param name="optionalLiteralDouble"> optional literal double. </param>
         /// <param name="optionalLiteralBool"> optional literal bool. </param>
         /// <param name="requiredBadDescription"> description with xml &lt;|endoftext|&gt;. </param>
-        internal Thing(string name, string requiredUnion, string requiredLiteralString, int requiredLiteralInt, double requiredLiteralDouble, bool requiredLiteralBool, string optionalLiteralString, int? optionalLiteralInt, double? optionalLiteralDouble, bool? optionalLiteralBool, string requiredBadDescription)
+        internal Thing(string name, string requiredUnion, string requiredLiteralString, int requiredLiteralInt, float requiredLiteralDouble, bool requiredLiteralBool, string optionalLiteralString, int? optionalLiteralInt, float? optionalLiteralDouble, bool? optionalLiteralBool, string requiredBadDescription)
         {
             Name = name;
             RequiredUnion = requiredUnion;
@@ -67,7 +67,7 @@ namespace TypeSpecFirstTest.Models
         public int RequiredLiteralInt { get; } = 123;
 
         /// <summary> required literal double. </summary>
-        public double RequiredLiteralDouble { get; } = 1.23;
+        public float RequiredLiteralDouble { get; } = 1.23;
 
         /// <summary> required literal bool. </summary>
         public bool RequiredLiteralBool { get; } = false;
@@ -79,7 +79,7 @@ namespace TypeSpecFirstTest.Models
         public int? OptionalLiteralInt { get; } = 456;
 
         /// <summary> optional literal double. </summary>
-        public double? OptionalLiteralDouble { get; } = 4.56;
+        public float? OptionalLiteralDouble { get; } = 4.56;
 
         /// <summary> optional literal bool. </summary>
         public bool? OptionalLiteralBool { get; } = true;

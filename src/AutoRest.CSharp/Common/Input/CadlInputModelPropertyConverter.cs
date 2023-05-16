@@ -91,18 +91,20 @@ namespace AutoRest.CSharp.Common.Input
                 return null;
             }
 
-            return literalType.LiteralValueType switch
+            var kind = literalType.LiteralValueType switch
             {
-                InputPrimitiveType primitiveType => primitiveType.Kind switch
-                {
-                    InputTypeKind.Boolean => $"{literalType.Value.ToString()!.ToLower()}",
-                    InputTypeKind.Float32 or InputTypeKind.Float64 or InputTypeKind.Float128
-                        or InputTypeKind.Int32 or InputTypeKind.Int64 => $"{literalType.Value.ToString()}",
-                    InputTypeKind.String => $"\"{(literalType.Value).ToString()}\"",
-                    _ => throw new Exception($"Unsupported literal value type: {primitiveType}"),
-
-                },
+                InputPrimitiveType primitiveType => primitiveType.Kind,
+                InputEnumType enumType => enumType.EnumValueType.Kind,
                 _ => throw new Exception($"Unsupported literal value type: {literalType.LiteralValueType}"),
+            };
+
+            return kind switch
+            {
+                InputTypeKind.Boolean => $"{literalType.Value.ToString()!.ToLower()}",
+                InputTypeKind.Float32 or InputTypeKind.Float64 or InputTypeKind.Float128
+                    or InputTypeKind.Int32 or InputTypeKind.Int64 => $"{literalType.Value.ToString()}",
+                InputTypeKind.String => $"\"{(literalType.Value).ToString()}\"",
+                _ => throw new Exception($"Unsupported literal value type: {kind}"),
             };
         }
     }
