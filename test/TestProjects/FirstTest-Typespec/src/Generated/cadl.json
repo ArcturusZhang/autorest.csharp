@@ -112,7 +112,7 @@
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "None"
+   "Usage": "Input"
   },
   {
    "$id": "14",

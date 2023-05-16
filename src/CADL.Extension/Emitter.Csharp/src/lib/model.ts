@@ -635,7 +635,8 @@ export function getInputType(
 
 export function getUsages(
     context: SdkContext,
-    ops?: HttpOperation[]
+    ops?: HttpOperation[],
+    exceptions?: Map<InputType, UsageFlags>
 ): { inputs: string[]; outputs: string[]; roundTrips: string[] } {
     const program = context.program;
     const result: {
