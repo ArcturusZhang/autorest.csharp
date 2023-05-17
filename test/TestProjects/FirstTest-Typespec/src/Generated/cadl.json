@@ -10,109 +10,109 @@
    "$id": "2",
    "Name": "Thing_requiredLiteralString",
    "Namespace": "TypeSpecFirstTest",
-   "Description": "",
+   "Description": "The Thing_requiredLiteralString",
    "EnumValueType": "String",
    "AllowedValues": [
     {
      "$id": "3",
      "Name": "accept",
      "Value": "accept",
-     "Description": ""
+     "Description": "accept"
     }
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "None"
+   "Usage": "RoundTrip"
   },
   {
    "$id": "4",
    "Name": "Thing_requiredLiteralInt",
    "Namespace": "TypeSpecFirstTest",
-   "Description": "",
+   "Description": "The Thing_requiredLiteralInt",
    "EnumValueType": "Float64",
    "AllowedValues": [
     {
      "$id": "5",
      "Name": "123",
      "Value": 123,
-     "Description": ""
+     "Description": "123"
     }
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "None"
+   "Usage": "RoundTrip"
   },
   {
    "$id": "6",
    "Name": "Thing_requiredLiteralDouble",
    "Namespace": "TypeSpecFirstTest",
-   "Description": "",
+   "Description": "The Thing_requiredLiteralDouble",
    "EnumValueType": "Float64",
    "AllowedValues": [
     {
      "$id": "7",
      "Name": "1.23",
      "Value": 1.23,
-     "Description": ""
+     "Description": "1.23"
     }
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "None"
+   "Usage": "RoundTrip"
   },
   {
    "$id": "8",
    "Name": "Thing_optionalLiteralString",
    "Namespace": "TypeSpecFirstTest",
-   "Description": "",
+   "Description": "The Thing_optionalLiteralString",
    "EnumValueType": "String",
    "AllowedValues": [
     {
      "$id": "9",
      "Name": "reject",
      "Value": "reject",
-     "Description": ""
+     "Description": "reject"
     }
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "None"
+   "Usage": "RoundTrip"
   },
   {
    "$id": "10",
    "Name": "Thing_optionalLiteralInt",
    "Namespace": "TypeSpecFirstTest",
-   "Description": "",
+   "Description": "The Thing_optionalLiteralInt",
    "EnumValueType": "Float64",
    "AllowedValues": [
     {
      "$id": "11",
      "Name": "456",
      "Value": 456,
-     "Description": ""
+     "Description": "456"
     }
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "None"
+   "Usage": "RoundTrip"
   },
   {
    "$id": "12",
    "Name": "Thing_optionalLiteralDouble",
    "Namespace": "TypeSpecFirstTest",
-   "Description": "",
+   "Description": "The Thing_optionalLiteralDouble",
    "EnumValueType": "Float64",
    "AllowedValues": [
     {
      "$id": "13",
      "Name": "4.56",
      "Value": 4.56,
-     "Description": ""
+     "Description": "4.56"
     }
    ],
    "IsExtensible": true,
    "IsNullable": false,
-   "Usage": "Input"
+   "Usage": "RoundTrip"
   },
   {
    "$id": "14",

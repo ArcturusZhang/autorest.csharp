@@ -477,7 +477,13 @@ namespace TypeSpecFirstTest.Samples
             var endpoint = new Uri("<https://my-service.azure.com>");
             var client = new TypeSpecFirstTestClient(endpoint);
 
-            var thing = new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>");
+            var thing = new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>")
+            {
+                OptionalLiteralString = ThingOptionalLiteralString.Reject,
+                OptionalLiteralInt = ThingOptionalLiteralInt._456,
+                OptionalLiteralDouble = ThingOptionalLiteralDouble._456,
+                OptionalLiteralBool = true,
+            };
             var result = await client.AnonymousBodyAsync(thing);
         }
 
@@ -1005,7 +1011,13 @@ namespace TypeSpecFirstTest.Samples
             }, new Dictionary<string, StringExtensibleEnum>
             {
                 ["key"] = StringExtensibleEnum.One,
-            }, new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>"), BinaryData.FromString("<your binary data content>"), new Dictionary<string, BinaryData>
+            }, new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>")
+            {
+                OptionalLiteralString = ThingOptionalLiteralString.Reject,
+                OptionalLiteralInt = ThingOptionalLiteralInt._456,
+                OptionalLiteralDouble = ThingOptionalLiteralDouble._456,
+                OptionalLiteralBool = true,
+            }, BinaryData.FromString("<your binary data content>"), new Dictionary<string, BinaryData>
             {
                 ["key"] = BinaryData.FromString("<your binary data content>"),
             })
@@ -1577,7 +1589,13 @@ namespace TypeSpecFirstTest.Samples
             var endpoint = new Uri("<https://my-service.azure.com>");
             var client = new TypeSpecFirstTestClient(endpoint);
 
-            var body = new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>");
+            var body = new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>")
+            {
+                OptionalLiteralString = ThingOptionalLiteralString.Reject,
+                OptionalLiteralInt = ThingOptionalLiteralInt._456,
+                OptionalLiteralDouble = ThingOptionalLiteralDouble._456,
+                OptionalLiteralBool = true,
+            };
             var result = await client.CreateLiteralAsync(body);
         }
 
@@ -1734,7 +1752,13 @@ namespace TypeSpecFirstTest.Samples
             var endpoint = new Uri("<https://my-service.azure.com>");
             var client = new TypeSpecFirstTestClient(endpoint);
 
-            var body = new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>");
+            var body = new Thing("<name>", "<requiredUnion>", "<requiredBadDescription>")
+            {
+                OptionalLiteralString = ThingOptionalLiteralString.Reject,
+                OptionalLiteralInt = ThingOptionalLiteralInt._456,
+                OptionalLiteralDouble = ThingOptionalLiteralDouble._456,
+                OptionalLiteralBool = true,
+            };
             var result = await client.InternalProtocolAsync(body);
         }
 
