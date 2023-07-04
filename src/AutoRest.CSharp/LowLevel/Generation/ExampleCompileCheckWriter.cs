@@ -96,6 +96,7 @@ namespace AutoRest.CSharp.LowLevel.Generation
             var testMethodName = _exampleComposer.GetTestMethodName(methodName, useAllParameters, isAsync, true);
             using (_writer.WriteMethodDeclaration(GetExampleMethodSignature(testMethodName, isAsync)))
             {
+                _exampleComposer.ComposeConvenienceMethodExample(_writer, method, GetMethodName(methodName, isAsync), isAsync);
                 _writer.AppendRaw(builder.ToString());
             }
             _writer.Line();

@@ -117,6 +117,20 @@ namespace AutoRest.CSharp.Generation.Writers
             return $"{builder.ToString()}";
         }
 
+        internal void ComposeConvenienceMethodExample(CodeWriter writer, ConvenienceMethod convenienceMethod, string methodName, bool isAsync)
+        {
+            if (HasNoCustomInput(convenienceMethod.Signature.Parameters))
+            {
+                // client.GetAllItems(CancellationToken cancellationToken = default)
+                ComposeExampleWithoutParameter(writer, convenienceMethod, methodName, isAsync, true);
+            }
+            else
+            {
+                // client.GetAllItems(int a, RequestContext context = null)
+                ComposeExampleWithRequiredParameters(writer, convenienceMethod, methodName, isAsync);
+            }
+        }
+
         internal void ComposeConvenienceMethodExample(ConvenienceMethod convenienceMethod, bool async, bool shouldWrap, string methodName, StringBuilder builder)
         {
             if (HasNoCustomInput(convenienceMethod.Signature.Parameters)) // client.GetAllItems(CancellationToken cancellationToken = default)
@@ -247,6 +261,11 @@ namespace AutoRest.CSharp.Generation.Writers
             WriteTestMethodName(clientMethod.ProtocolMethodSignature.Name, useAllParameters, isAsync, false, builder);
         }
 
+        private void ComposeExampleWithoutParameter(CodeWriter writer, ConvenienceMethod convenienceMethod, string methodName, bool isAsync, bool useAllParameters)
+        {
+            ComposeCodeSnippet(writer, convenienceMethod, methodName, isAsync, useAllParameters);
+        }
+
         private void ComposeExampleWithoutParameter(ConvenienceMethod convenienceMethod, string methodName, bool async, bool allParameters, bool shouldWrap, StringBuilder builder)
         {
             if (shouldWrap)
@@ -292,28 +311,60 @@ namespace AutoRest.CSharp.Generation.Writers
                 builder.Append("]]></code>");
         }
 
-        internal void ComposeCodeSnippet(CodeWriter codeWriter, LowLevelClientMethod clientMethod, string methodName, bool isAsync, bool useAllParameters)
+        private void ComposeCodeSnippet(CodeWriter writer, ConvenienceMethod convenienceMethod, string methodName, bool isAsync, bool useAllParameters)
         {
-            ComposeGetClientCodes(codeWriter);
+            ComposeGetClientCodes(writer);
+
+            writer.Line();
+
+            // get input parameters -- only body parameter is not initialized inline in the invocation, therefore we take out all the body parameters.
+            var typeProviderTypedParameters = convenienceMethod.Signature.Parameters.Where(p => p.RequestLocation == RequestLocation.Body);
+            foreach (var parameter in typeProviderTypedParameters)
+            {
+                ComposeBodyParameter(writer, parameter, useAllParameters);
+            }
+
+            switch (convenienceMethod.IsLongRunning, convenienceMethod.IsPageable)
+            {
+                case (true, true):
+                    // do nothing, this never happen right now
+                    break;
+                case (true, false):
+                    ComposeHandleLongRunningResponseCode(writer, convenienceMethod, methodName, isAsync, useAllParameters);
+                    break;
+                case (false, true):
+                    ComposeHandlePageableResponseCode(writer, convenienceMethod, methodName, isAsync, useAllParameters);
+                    break;
+                case (false, false):
+                    ComposeHandleNormalResponseCode(writer, convenienceMethod, methodName, isAsync, useAllParameters);
+                    break;
+            }
+        }
+
+        internal void ComposeCodeSnippet(CodeWriter writer, LowLevelClientMethod clientMethod, string methodName, bool isAsync, bool useAllParameters)
+        {
+            ComposeGetClientCodes(writer);
+
+            writer.Line();
 
             if (clientMethod.RequestBodyType is { } requestBodyType)
             {
-                ComposeRequestContent(codeWriter, useAllParameters, requestBodyType);
+                ComposeRequestContent(writer, useAllParameters, requestBodyType);
             }
 
             switch (clientMethod.LongRunning, clientMethod.PagingInfo)
             {
                 case (not null, not null):
-                    ComposeHandleLongRunningPageableResponseCode(codeWriter, clientMethod, methodName, isAsync, useAllParameters);
+                    ComposeHandleLongRunningPageableResponseCode(writer, clientMethod, methodName, isAsync, useAllParameters);
                     break;
                 case (not null, null):
-                    ComposeHandleLongRunningResponseCode(codeWriter, clientMethod, methodName, isAsync, useAllParameters);
+                    ComposeHandleLongRunningResponseCode(writer, clientMethod, methodName, isAsync, useAllParameters);
                     break;
                 case (null, not null):
-                    ComposeHandlePageableResponseCode(codeWriter, clientMethod, methodName, isAsync, useAllParameters);
+                    ComposeHandlePageableResponseCode(writer, clientMethod, methodName, isAsync, useAllParameters);
                     break;
                 case (null, null):
-                    ComposeHandleNormalResponseCode(codeWriter, clientMethod, methodName, isAsync, useAllParameters);
+                    ComposeHandleNormalResponseCode(writer, clientMethod, methodName, isAsync, useAllParameters);
                     break;
             }
         }
@@ -963,6 +1014,15 @@ namespace AutoRest.CSharp.Generation.Writers
             writer.Line();
         }
 
+        private void ComposeBodyParameter(CodeWriter writer, Parameter bodyParameter, bool useAllParameters)
+        {
+            // first we need to collect all the variables we need
+            // var <parameterName> = {value_expression};
+            writer.Append($"{bodyParameter.Type} {bodyParameter.Name} = ");
+            ComposeCSharpType(writer, bodyParameter.Type, null, useAllParameters, true, new HashSet<ObjectType>());
+            writer.LineRaw(";");
+        }
+
         private void ComposeBodyParameter(bool composeAll, Parameter bodyParameter, StringBuilder builder)
         {
             // var <parameterName> = {value_expression};
@@ -973,7 +1033,7 @@ namespace AutoRest.CSharp.Generation.Writers
 
         private CodeWriter ComposeRequestContent(CodeWriter writer, bool useAllProperties, InputType inputType, string? propertyDescription, HashSet<InputModelType> visitedModels) => inputType switch
         {
-            InputListType listType => ComposeArrayRequestContent(writer, useAllProperties, listType.ElementType, visitedModels),
+            InputListType listType => ComposeListRequestContent(writer, useAllProperties, listType.ElementType, visitedModels),
             InputDictionaryType dictionaryType => ComposeDictionaryRequestContent(writer, useAllProperties, dictionaryType.ValueType, visitedModels),
             InputEnumType enumType => writer.Literal(enumType.AllowedValues.First().Value),
             InputPrimitiveType primitiveType => primitiveType.Kind switch
@@ -1005,6 +1065,16 @@ namespace AutoRest.CSharp.Generation.Writers
             _ => writer.AppendRaw("new {}"),
         };
 
+        private CodeWriter ComposeCSharpType(CodeWriter writer, CSharpType type, string? propertyDescription, bool useAllParameters, bool includeCollectionInitialization, HashSet<ObjectType> visitedModels) => type switch
+        {
+            _ when TypeFactory.IsIEnumerableOfT(type) || TypeFactory.IsReadWriteList(type) => ComposeListCSharpType(writer, type.Arguments.Single(), useAllParameters, includeCollectionInitialization, visitedModels), // IEnumerable<T> or IList<T> is guaranteed to have one and only one generic parameter
+            _ when TypeFactory.IsReadWriteDictionary(type) => ComposeDictionaryCSharpType(writer, type.Arguments[0], type.Arguments[1], useAllParameters, includeCollectionInitialization, visitedModels), // IDictionary<K, V> is guaranteed to have two generic parameters
+            { IsFrameworkType: true } => writer.Append(MockFrameworkTypeParameterValue(propertyDescription ?? "null", type)),
+            { IsFrameworkType: false, Implementation: ObjectType objectType } => ComposeObjectType(writer, objectType, useAllParameters, visitedModels),
+            { IsFrameworkType: false, Implementation: EnumType enumType } => writer.Append($"{enumType.Type}.{enumType.Values.First().Declaration.Name}"),
+            _ => writer.AppendRaw("null")
+        };
+
         private string ComposeCSharpType(bool allProperties, CSharpType type, string? propertyDescription, int indent, bool includeCollectionInitialization, HashSet<ObjectType> visitedModels) => type switch
         {
             _ when TypeFactory.IsIEnumerableOfT(type) => ComposeArrayCSharpType(allProperties, type.Arguments.Single(), indent, includeCollectionInitialization, visitedModels), // IEnumerable<T> is guaranteed to have one and only one generic parameter
@@ -1016,7 +1086,7 @@ namespace AutoRest.CSharp.Generation.Writers
             _ => "null",
         };
 
-        private CodeWriter ComposeArrayRequestContent(CodeWriter writer, bool useAllProperties, InputType elementType, HashSet<InputModelType> visitedModels)
+        private CodeWriter ComposeListRequestContent(CodeWriter writer, bool useAllProperties, InputType elementType, HashSet<InputModelType> visitedModels)
         {
             /* GENERATED CODE PATTERN
              * new[] {
@@ -1031,6 +1101,31 @@ namespace AutoRest.CSharp.Generation.Writers
             {
                 ComposeRequestContent(writer, useAllProperties, elementType, null, visitedModels);
                 writer.Line();
+            }
+
+            return writer;
+        }
+
+        private CodeWriter ComposeListCSharpType(CodeWriter writer, CSharpType elementType, bool useAllParameters, bool includeCollectionInitialization, HashSet<ObjectType> visitedModels)
+        {
+            /* GENERATED CODE PATTERN
+             * new <TypeName>[] {
+             *     {element_expression}
+             * }
+             * or
+             * Array.Empty<TypeName>()
+             */
+
+            // in a case of IList<IList<T>> or IList<IDictionary<K, V>>, here elementType is IList<T> or IDictionary<K, V> we need to get the concrete type of it
+            elementType = TypeFactory.GetImplementationType(elementType);
+
+            if (includeCollectionInitialization)
+            {
+                writer.Append($"new {elementType}");
+            }
+            using (writer.Scope())
+            {
+                ComposeListCSharpType(writer, elementType, useAllParameters, includeCollectionInitialization, visitedModels);
             }
 
             return writer;
@@ -1085,6 +1180,34 @@ namespace AutoRest.CSharp.Generation.Writers
                 writer.Append($"key = ");
                 ComposeRequestContent(writer, useAllProperties, elementType, null, visitedModels);
             }
+            return writer;
+        }
+
+        private CodeWriter ComposeDictionaryCSharpType(CodeWriter writer, CSharpType keyType, CSharpType valueType, bool useAllParameters, bool includeCollectionInitialization, HashSet<ObjectType> visitedModels)
+        {
+            /* GENERATED CODE PATTERN
+             * new Dictionary<{keyType}, {valueType}>{
+             *     [key] = {value_expression},
+             * }
+             * or
+             * new Dictionary<{keyType}, {valueType}>()
+             */
+            // in a case of IDictionary<string, IList<T>> or IDictionary<string, IDictionary<K, V>>, here elementType is IList<T> or IDictionary<K, V> we need to get the concrete type of it
+            valueType = TypeFactory.GetImplementationType(valueType);
+
+            if (includeCollectionInitialization)
+            {
+                writer.Append($"new {typeof(Dictionary<,>)}<{keyType}, {valueType}>");
+            }
+            using (writer.Scope())
+            {
+                writer.AppendRaw("[");
+                ComposeCSharpType(writer, keyType, "key", useAllParameters, includeCollectionInitialization, visitedModels);
+                writer.AppendRaw("] = ");
+                ComposeCSharpType(writer, valueType, null, useAllParameters, includeCollectionInitialization, visitedModels);
+                writer.LineRaw(",");
+            }
+
             return writer;
         }
 
@@ -1169,6 +1292,40 @@ namespace AutoRest.CSharp.Generation.Writers
                     writer.AppendRaw(",");
                 }
             }
+
+            return writer;
+        }
+
+        private CodeWriter ComposeObjectType(CodeWriter writer, ObjectType model, bool useAllParameters, HashSet<ObjectType> visitedModels)
+        {
+            visitedModels.Add(model);
+
+            /* GENERATED CODE PATTERN
+                     * new <ModelName>(parameterInCtor1, parameterInCtor2) {
+                     *     propNotInCtor1 = {value_expression},
+                     *     propNotInCtor2 = {value_expression},
+                     *     ...
+                     * }
+                     */
+            var concreteModel = GetConcreteChildModel(model);
+            var ctor = model.InitializationConstructor;
+            var initializers = new List<PropertyInitializer>();
+            foreach (var parameter in ctor.Signature.Parameters)
+            {
+                // find the property from this parameter
+                var property = ctor.FindPropertyInitializedByParameter(parameter);
+                if (property == null)
+                    continue;
+
+                initializers.Add(new(
+                    property.Declaration.Name, property.Declaration.Type, false, MockFrameworkTypeParameterValue(parameter.Name, parameter.Type)));
+            }
+
+            // TODO -- To be refactored
+            // the method CodeWriterExtensions.WriteInitialization does not quite fit the requirement here - it is not always writing a statement, instead it could write multiple statements
+            // when there is any collection values
+            // therefore here we have to write the property initializations by ourselves here
+            writer.WriteInitialization(value => writer.Append(value), model, ctor, initializers);
 
             return writer;
         }
@@ -1278,8 +1435,6 @@ namespace AutoRest.CSharp.Generation.Writers
                 writer.Append($".{factoryMethod.Name}({MockParameterValues(factoryMethod.Parameters, MockParameterValue, true)})");
             }
             writer.LineRaw(";");
-
-            writer.Line();
         }
 
         private void ComposeGetClientCodes(StringBuilder builder)
@@ -1373,7 +1528,8 @@ namespace AutoRest.CSharp.Generation.Writers
             return "https://my-service.azure.com";
         }
 
-        // TODO -- the model.DerivedModels is not properly contains the derived models now.
+        // TODO -- the model.DerivedModels property does not properly contain the derived models now, it is always empty
+        // issue tracking: https://github.com/Azure/autorest.csharp/issues/3557
         private static InputModelType GetConcreteChildModel(InputModelType model)
             => model.DerivedModels.Any() ? model.DerivedModels[0] : model;
 
