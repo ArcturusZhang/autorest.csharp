@@ -10,6 +10,8 @@ using AutoRest.CSharp.Common.Output.Expressions.ValueExpressions;
 using AutoRest.CSharp.Common.Output.Models;
 using AutoRest.CSharp.Common.Output.Models.Types;
 using AutoRest.CSharp.Generation.Types;
+using AutoRest.CSharp.Generation.Writers;
+using AutoRest.CSharp.Input;
 using AutoRest.CSharp.Input.Source;
 using AutoRest.CSharp.Output.Builders;
 using AutoRest.CSharp.Output.Models.Requests;
@@ -17,46 +19,86 @@ using AutoRest.CSharp.Output.Models.Serialization.Json;
 using AutoRest.CSharp.Output.Models.Serialization.Xml;
 using AutoRest.CSharp.Output.Models.Shared;
 using AutoRest.CSharp.Utilities;
+using Microsoft.CodeAnalysis;
 
 namespace AutoRest.CSharp.Output.Models.Types
 {
     internal sealed class ModelTypeProvider : SerializableObjectType
     {
-        private ModelTypeProviderFields? _fields;
         private ConstructorSignature? _publicConstructor;
         private ConstructorSignature? _serializationConstructor;
-        private InputModelType _inputModel;
-        private TypeFactory _typeFactory;
-        private SourceInputModel? _sourceInputModel;
-        private InputModelType[]? _derivedTypes;
-        private SerializableObjectType? _defaultDerivedType;
+        private ObjectTypeProperty? _additionalPropertiesProperty;
+        private readonly InputModelType _inputModel;
+        private readonly SourceInputModel? _sourceInputModel;
+        private readonly TypeFactory _typeFactory;
+        private readonly IReadOnlyList<InputModelType> _derivedModels;
+        private readonly SerializableObjectType? _defaultDerivedType;
+        private readonly ModelTypeMapping? _modelTypeMapping;
+        private readonly InputModelTypeUsage _inputModelUsage;
+        private readonly IReadOnlyList<InputModelProperty> _inputModelProperties;
+        private ModelTypeProviderFields? _fields;
 
         protected override string DefaultName { get; }
         protected override string DefaultAccessibility { get; }
+        protected override TypeKind TypeKind { get; }
         public bool IsAccessibilityOverridden { get; }
         public override bool IncludeConverter => false;
         protected override bool IsAbstract => !Configuration.SuppressAbstractBaseClasses.Contains(DefaultName) && _inputModel.DiscriminatorPropertyName is not null;
 
-        public IObjectTypeFields<InputModelProperty> Fields => _fields ??= EnsureFields();
+        public ModelTypeProviderFields Fields => _fields ??= new ModelTypeProviderFields(_inputModelProperties, Type, _inputModelUsage, _inputModel.InheritedDictionaryType, IsStruct, _inputModel.IsPropertyBag, _typeFactory, _modelTypeMapping);
         private ConstructorSignature InitializationConstructorSignature => _publicConstructor ??= EnsurePublicConstructorSignature();
         private ConstructorSignature SerializationConstructorSignature => _serializationConstructor ??= EnsureSerializationConstructorSignature();
 
-        public override ObjectTypeProperty? AdditionalPropertiesProperty => throw new NotImplementedException();
+        public override ObjectTypeProperty? AdditionalPropertiesProperty => _additionalPropertiesProperty ??= EnsureAdditionalPropertiesProperty();
+
+        private ObjectTypeProperty? EnsureAdditionalPropertiesProperty()
+            => Fields.AdditionalProperties is { } additionalPropertiesField
+                ? Properties.Last(p => p.Declaration.Name == additionalPropertiesField.Name)
+                : null;
 
         public bool IsPropertyBag => _inputModel.IsPropertyBag;
 
-        public ModelTypeProvider(InputModelType inputModel, string defaultNamespace, SourceInputModel? sourceInputModel, TypeFactory? typeFactory = null, InputModelType[]? derivedTypes = null, SerializableObjectType? defaultDerivedType = null)
+        public ModelTypeProvider(InputModelType inputModel, string defaultNamespace, SourceInputModel? sourceInputModel, TypeFactory typeFactory, SerializableObjectType? defaultDerivedType = null)
             : base(defaultNamespace, sourceInputModel)
         {
-            _typeFactory = typeFactory!;
-            _inputModel = inputModel;
             _sourceInputModel = sourceInputModel;
+            _typeFactory = typeFactory;
+            _inputModel = inputModel;
+
+            _deprecated = inputModel.Deprecated;
+            _derivedModels = inputModel.DerivedModels;
+            _defaultDerivedType = inputModel.DerivedModels.Any() && inputModel.BaseModel is not null
+                ? this // if I have children and parents then I am my own defaultDerivedType
+                : defaultDerivedType ?? (inputModel.IsUnknownDiscriminatorModel ? this : null);
+
             DefaultName = inputModel.Name.ToCleanName();
             DefaultAccessibility = inputModel.Accessibility ?? "public";
+            TypeKind = IsStruct ? TypeKind.Struct : TypeKind.Class;
             IsAccessibilityOverridden = inputModel.Accessibility != null;
-            _deprecated = inputModel.Deprecated;
-            _derivedTypes = derivedTypes;
-            _defaultDerivedType = defaultDerivedType ?? (inputModel.IsUnknownDiscriminatorModel ? this : null);
+
+            _modelTypeMapping = sourceInputModel?.CreateForModel(ExistingType);
+            _inputModelUsage = UpdateInputModelUsage(inputModel, _modelTypeMapping);
+            _inputModelProperties = inputModel.Properties;
+        }
+
+        private static InputModelTypeUsage UpdateInputModelUsage(InputModelType inputModel, ModelTypeMapping? modelTypeMapping)
+        {
+            var usage = inputModel.Usage;
+            if (modelTypeMapping?.Usage is { } usageDefinedInSource)
+            {
+                foreach (var schemaTypeUsage in usageDefinedInSource.Select(u => Enum.Parse<SchemaTypeUsage>(u, true)))
+                {
+                    usage |= schemaTypeUsage switch
+                    {
+                        SchemaTypeUsage.Input => InputModelTypeUsage.Input,
+                        SchemaTypeUsage.Output => InputModelTypeUsage.Output,
+                        SchemaTypeUsage.RoundTrip => InputModelTypeUsage.RoundTrip,
+                        _ => InputModelTypeUsage.None
+                    };
+                }
+            }
+
+            return usage;
         }
 
         private MethodSignatureModifiers GetFromResponseModifiers()
@@ -91,12 +133,7 @@ namespace AutoRest.CSharp.Output.Models.Types
 
         protected override FormattableString CreateDescription()
         {
-            return _inputModel.Description != null ? (FormattableString)$"{_inputModel.Description}" : $"The {_inputModel.Name}.";
-        }
-
-        private ModelTypeProviderFields EnsureFields()
-        {
-            return new ModelTypeProviderFields(_inputModel, Type, _typeFactory, _sourceInputModel?.CreateForModel(ExistingType));
+            return string.IsNullOrEmpty(_inputModel.Description) ? $"The {_inputModel.Name}." : FormattableStringHelpers.FromString(_inputModel.Description!);
         }
 
         private ConstructorSignature EnsurePublicConstructorSignature()
@@ -420,7 +457,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             else
             {
                 //only load implementations for the base type
-                implementations = _derivedTypes!.Select(child => new ObjectTypeDiscriminatorImplementation(child.DiscriminatorValue!, _typeFactory.CreateType(child))).ToArray();
+                implementations = _derivedModels!.Select(child => new ObjectTypeDiscriminatorImplementation(child.DiscriminatorValue!, _typeFactory.CreateType(child))).ToArray();
                 property = Properties.First(p => p.InputModelProperty is not null && p.InputModelProperty.IsDiscriminator);
             }
 
@@ -445,7 +482,6 @@ namespace AutoRest.CSharp.Output.Models.Types
                 DefaultNamespace,
                 _sourceInputModel,
                 _typeFactory,
-                _derivedTypes,
                 _defaultDerivedType);
             return result;
         }

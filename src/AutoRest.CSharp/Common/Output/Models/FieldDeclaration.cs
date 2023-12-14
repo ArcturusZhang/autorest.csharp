@@ -10,7 +10,7 @@ using AutoRest.CSharp.Output.Models.Serialization;
 
 namespace AutoRest.CSharp.Output.Models
 {
-    internal record FieldDeclaration(FormattableString? Description, FieldModifiers Modifiers, CSharpType Type, CSharpType ValueType, CodeWriterDeclaration Declaration, ValueExpression? InitializationValue, bool IsRequired, SerializationFormat SerializationFormat, bool IsField = false, bool WriteAsProperty = false, bool OptionalViaNullability = false, FieldModifiers? GetterModifiers = null, FieldModifiers? SetterModifiers = null, SourcePropertySerializationMapping? SerializationMapping = null)
+    internal record FieldDeclaration(FormattableString? Description, FieldModifiers Modifiers, CSharpType Type, CodeWriterDeclaration Declaration, ValueExpression? InitializationValue, bool IsRequired, SerializationFormat SerializationFormat, bool WriteAsProperty = false, bool OptionalViaNullability = false, FieldModifiers? GetterModifiers = null, FieldModifiers? SetterModifiers = null, SourcePropertySerializationMapping? SerializationMapping = null)
     {
         public string Name => Declaration.ActualName;
         public string Accessibility => (Modifiers & FieldModifiers.Public) > 0 ? "public" : "internal";
@@ -28,7 +28,6 @@ namespace AutoRest.CSharp.Output.Models
             : this(Description: description,
                   Modifiers: modifiers,
                   Type: type,
-                  ValueType: type,
                   Declaration: new CodeWriterDeclaration(name),
                   IsRequired: false,
                   InitializationValue: initializationValue,
@@ -39,12 +38,10 @@ namespace AutoRest.CSharp.Output.Models
             : this(Description: null,
                   Modifiers: modifiers,
                   Type: type,
-                  ValueType: type,
                   Declaration: new CodeWriterDeclaration(name),
                   InitializationValue: initializationValue,
                   IsRequired: false,
                   SerializationFormat: serializationFormat,
-                  IsField: false,
                   WriteAsProperty: writeAsProperty,
                   GetterModifiers: null,
                   SetterModifiers: null)
@@ -54,12 +51,10 @@ namespace AutoRest.CSharp.Output.Models
             : this(Description: description,
                   Modifiers: modifiers,
                   Type: type,
-                  ValueType: type,
                   Declaration: new CodeWriterDeclaration(name),
                   InitializationValue: null,
                   IsRequired: false,
                   SerializationFormat: serializationFormat,
-                  IsField: false,
                   WriteAsProperty: writeAsProperty)
         { }
     }

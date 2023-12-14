@@ -18,13 +18,13 @@ namespace AutoRest.CSharp.Output.Models.Types
 {
     internal class ObjectTypeProperty
     {
-        public ObjectTypeProperty(FieldDeclaration field, InputModelProperty inputModelProperty)
+        public ObjectTypeProperty(FieldDeclaration field, InputModelProperty? inputModelProperty)
             : this(declaration: new MemberDeclarationOptions(field.Accessibility, field.Name, field.Type),
                   parameterDescription: field.Description?.ToString() ?? string.Empty,
                   isReadOnly: field.Modifiers.HasFlag(FieldModifiers.ReadOnly),
                   schemaProperty: null,
                   isRequired: field.IsRequired,
-                  valueType: field.ValueType,
+                  valueType: null,
                   inputModelProperty: inputModelProperty,
                   optionalViaNullability: field.OptionalViaNullability,
                   getterModifiers: field.GetterModifiers,
@@ -300,7 +300,7 @@ namespace AutoRest.CSharp.Output.Models.Types
                 description = $"{parameterDescription}";
             }
 
-            FormattableString binaryDataExtraDescription = CreateBinaryDataExtraDescription(Declaration.Type, SerializationFormat);
+            FormattableString binaryDataExtraDescription = CreateBinaryDataExtraDescription();
             description = $"{description}{binaryDataExtraDescription}";
 
             return description;
@@ -310,11 +310,10 @@ namespace AutoRest.CSharp.Output.Models.Types
         /// This method will construct an additional description for properties that are binary data. For properties whose values are union types,
         /// the description will include the types of values that are allowed.
         /// </summary>
-        /// <param name="type">The CSharpType of the property.</param>
-        /// <param name="serializationFormat">The serialization format of the property.</param>
         /// <returns>The formatted description string for the property.</returns>
-        private FormattableString CreateBinaryDataExtraDescription(CSharpType type, SerializationFormat serializationFormat)
+        private FormattableString CreateBinaryDataExtraDescription()
         {
+            var type = Declaration.Type;
             if (type.IsFrameworkType)
             {
                 string typeSpecificDesc;
@@ -333,21 +332,21 @@ namespace AutoRest.CSharp.Output.Models.Types
                 if (type.FrameworkType == typeof(BinaryData))
                 {
                     typeSpecificDesc = "this property";
-                    return ConstructBinaryDataDescription(typeSpecificDesc, serializationFormat, unionTypeDescriptions);
+                    return ConstructBinaryDataDescription(typeSpecificDesc, SerializationFormat, unionTypeDescriptions);
                 }
                 if (TypeFactory.IsList(type) &&
                     type.Arguments[0].IsFrameworkType &&
                     type.Arguments[0].FrameworkType == typeof(BinaryData))
                 {
                     typeSpecificDesc = "the element of this property";
-                    return ConstructBinaryDataDescription(typeSpecificDesc, serializationFormat, unionTypeDescriptions);
+                    return ConstructBinaryDataDescription(typeSpecificDesc, SerializationFormat, unionTypeDescriptions);
                 }
                 if (TypeFactory.IsDictionary(type) &&
                     type.Arguments[1].IsFrameworkType &&
                     type.Arguments[1].FrameworkType == typeof(BinaryData))
                 {
                     typeSpecificDesc = "the value of this property";
-                    return ConstructBinaryDataDescription(typeSpecificDesc, serializationFormat, unionTypeDescriptions);
+                    return ConstructBinaryDataDescription(typeSpecificDesc, SerializationFormat, unionTypeDescriptions);
                 }
             }
             return $"";

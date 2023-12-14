@@ -108,7 +108,8 @@ namespace AutoRest.CSharp.Common.Input
             }
 
             var derivedModels = new List<InputModelType>();
-            var model = new InputModelType(name, ns, accessibility, deprecated, description, usage, properties, baseModel, derivedModels, discriminatorValue, discriminatorPropertyValue, IsNullable: isNullable)
+            // TODO -- when we implement this in the emitter, change it
+            var model = new InputModelType(name, ns, accessibility, deprecated, description, usage, properties, baseModel, derivedModels, discriminatorValue, discriminatorPropertyValue, null, IsNullable: isNullable)
             {
                 IsAnonymousModel = isAnonymousModel
             };
