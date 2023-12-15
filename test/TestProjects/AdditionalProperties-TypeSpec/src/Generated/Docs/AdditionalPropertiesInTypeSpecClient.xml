@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <members>
+    <member name="DoInputIsAdditionalPropertiesAsync(IDictionary{string,BinaryData},CancellationToken)">
+      <example>
+This sample shows how to call DoInputIsAdditionalPropertiesAsync.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+Response response = await client.DoInputIsAdditionalPropertiesAsync(new Dictionary<string, BinaryData>
+{
+    ["key"] = BinaryData.FromObjectAsJson(new object())
+});
+]]></code>
+This sample shows how to call DoInputIsAdditionalPropertiesAsync with all parameters.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+Response response = await client.DoInputIsAdditionalPropertiesAsync(new Dictionary<string, BinaryData>
+{
+    ["key"] = BinaryData.FromObjectAsJson(new object())
+});
+]]></code></example>
+    </member>
+    <member name="DoInputIsAdditionalProperties(IDictionary{string,BinaryData},CancellationToken)">
+      <example>
+This sample shows how to call DoInputIsAdditionalProperties.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+Response response = client.DoInputIsAdditionalProperties(new Dictionary<string, BinaryData>
+{
+    ["key"] = BinaryData.FromObjectAsJson(new object())
+});
+]]></code>
+This sample shows how to call DoInputIsAdditionalProperties with all parameters.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+Response response = client.DoInputIsAdditionalProperties(new Dictionary<string, BinaryData>
+{
+    ["key"] = BinaryData.FromObjectAsJson(new object())
+});
+]]></code></example>
+    </member>
+    <member name="DoInputIsAdditionalPropertiesAsync(RequestContent,RequestContext)">
+      <example>
+This sample shows how to call DoInputIsAdditionalPropertiesAsync.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    key = new object(),
+});
+Response response = await client.DoInputIsAdditionalPropertiesAsync(content);
+
+Console.WriteLine(response.Status);
+]]></code>
+This sample shows how to call DoInputIsAdditionalPropertiesAsync with all request content.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    key = new object(),
+});
+Response response = await client.DoInputIsAdditionalPropertiesAsync(content);
+
+Console.WriteLine(response.Status);
+]]></code></example>
+    </member>
+    <member name="DoInputIsAdditionalProperties(RequestContent,RequestContext)">
+      <example>
+This sample shows how to call DoInputIsAdditionalProperties.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    key = new object(),
+});
+Response response = client.DoInputIsAdditionalProperties(content);
+
+Console.WriteLine(response.Status);
+]]></code>
+This sample shows how to call DoInputIsAdditionalProperties with all request content.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    key = new object(),
+});
+Response response = client.DoInputIsAdditionalProperties(content);
+
+Console.WriteLine(response.Status);
+]]></code></example>
+    </member>
+    <member name="DoInputExtendsAdditionalPropertiesAsync(InputExtendsAdditionalProperties,CancellationToken)">
+      <example>
+This sample shows how to call DoInputExtendsAdditionalPropertiesAsync.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+InputExtendsAdditionalProperties body = new InputExtendsAdditionalProperties();
+Response response = await client.DoInputExtendsAdditionalPropertiesAsync(body);
+]]></code>
+This sample shows how to call DoInputExtendsAdditionalPropertiesAsync with all parameters.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+InputExtendsAdditionalProperties body = new InputExtendsAdditionalProperties
+{
+    Bar = "<bar>",
+};
+Response response = await client.DoInputExtendsAdditionalPropertiesAsync(body);
+]]></code></example>
+    </member>
+    <member name="DoInputExtendsAdditionalProperties(InputExtendsAdditionalProperties,CancellationToken)">
+      <example>
+This sample shows how to call DoInputExtendsAdditionalProperties.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+InputExtendsAdditionalProperties body = new InputExtendsAdditionalProperties();
+Response response = client.DoInputExtendsAdditionalProperties(body);
+]]></code>
+This sample shows how to call DoInputExtendsAdditionalProperties with all parameters.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+InputExtendsAdditionalProperties body = new InputExtendsAdditionalProperties
+{
+    Bar = "<bar>",
+};
+Response response = client.DoInputExtendsAdditionalProperties(body);
+]]></code></example>
+    </member>
+    <member name="DoInputExtendsAdditionalPropertiesAsync(RequestContent,RequestContext)">
+      <example>
+This sample shows how to call DoInputExtendsAdditionalPropertiesAsync.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    foo = "<foo>",
+});
+Response response = await client.DoInputExtendsAdditionalPropertiesAsync(content);
+
+Console.WriteLine(response.Status);
+]]></code>
+This sample shows how to call DoInputExtendsAdditionalPropertiesAsync with all request content.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    foo = "<foo>",
+    bar = "<bar>",
+});
+Response response = await client.DoInputExtendsAdditionalPropertiesAsync(content);
+
+Console.WriteLine(response.Status);
+]]></code></example>
+    </member>
+    <member name="DoInputExtendsAdditionalProperties(RequestContent,RequestContext)">
+      <example>
+This sample shows how to call DoInputExtendsAdditionalProperties.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    foo = "<foo>",
+});
+Response response = client.DoInputExtendsAdditionalProperties(content);
+
+Console.WriteLine(response.Status);
+]]></code>
+This sample shows how to call DoInputExtendsAdditionalProperties with all request content.
+<code><![CDATA[
+Uri endpoint = new Uri("<https://my-service.azure.com>");
+AzureKeyCredential credential = new AzureKeyCredential("<key>");
+AdditionalPropertiesInTypeSpecClient client = new AdditionalPropertiesInTypeSpecClient(endpoint, credential);
+
+using RequestContent content = RequestContent.Create(new
+{
+    foo = "<foo>",
+    bar = "<bar>",
+});
+Response response = client.DoInputExtendsAdditionalProperties(content);
+
+Console.WriteLine(response.Status);
+]]></code></example>
+    </member>
+  </members>
+</doc>
