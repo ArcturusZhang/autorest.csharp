@@ -234,7 +234,6 @@ namespace AutoRest.CSharp.Common.Input
             var properties = new List<InputModelProperty>();
             var derived = new List<InputModelType>();
             var baseModelSchema = GetBaseModelSchema(schema);
-            var dictionarySchema = Configuration.AzureArm ? null : schema.Parents?.Immediate?.OfType<DictionarySchema>().FirstOrDefault();
             model = new InputModelType(
                 Name: schema.Language.Default.Name,
                 Namespace: schema.Extensions?.Namespace,
@@ -247,7 +246,11 @@ namespace AutoRest.CSharp.Common.Input
                 DerivedModels: derived,
                 DiscriminatorValue: schema.DiscriminatorValue,
                 DiscriminatorPropertyName: schema.Discriminator?.Property.SerializedName,
-                InheritedDictionaryType: dictionarySchema is not null ? (InputDictionaryType)GetOrCreateType(dictionarySchema, _modelsCache, false) : null,
+                // TODO -- to support this, it requires more consolidation work in HLC.
+                // Currently there are only two places using this converted code mode: HLC and swagger-DPG.
+                // HLC only converts schemas into input types for operations to use, when generating models, HLC is using its original schemas, therefore whatever we put here does not change the result.
+                // swagger-DPG does not generate models therefore it also does not matter what we put here.
+                InheritedDictionaryType: null,
                 IsNullable: false);
 
             _modelsCache[schema] = model;
