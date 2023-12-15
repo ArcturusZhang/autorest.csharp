@@ -47,7 +47,7 @@ namespace AutoRest.CSharp.Output.Models.Types
             DefaultDerivedSchema.AddDefaultDerivedSchemas(codeModel);
             ConstantSchemaTransformer.Transform(codeModel);
             ModelPropertyClientDefaultValueTransformer.Transform(codeModel);
-            _input = new CodeModelConverter(codeModel, _context.SchemaUsageProvider).CreateNamespace();
+            _input = new CodeModelConverter().CreateNamespace(codeModel, _context.SchemaUsageProvider);
 
             _defaultNamespace = Configuration.Namespace;
             _libraryName = Configuration.LibraryName;
