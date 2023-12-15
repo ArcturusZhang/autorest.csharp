@@ -20,10 +20,6 @@
       "commandName": "Project",
       "commandLineArgs": "--standalone $(SolutionDir)\\test\\TestServerProjects\\additionalProperties\\Generated"
     },
-    "AdditionalProperties-TypeSpec": {
-      "commandName": "Project",
-      "commandLineArgs": "--standalone $(SolutionDir)\\test\\TestProjects\\AdditionalProperties-TypeSpec\\src\\Generated -n"
-    },
     "AdditionalPropertiesEx": {
       "commandName": "Project",
       "commandLineArgs": "--standalone $(SolutionDir)\\test\\TestProjects\\AdditionalPropertiesEx\\Generated"
